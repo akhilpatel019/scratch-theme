@@ -1,0 +1,11 @@
+{
+    "sections": {
+        "heading":{
+            "type": "heading",
+            "settings": {}
+        }
+    },
+    "order": [
+        "heading"
+    ]
+}

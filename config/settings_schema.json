@@ -1,0 +1,21 @@
+[
+    {
+    "name": "theme_info",
+    "theme_name": "Scratch Theme",
+    "theme_version": "1.0",
+    "theme_author": "Akhil Patel",
+    "theme_documentation_url": "https://help.shopify.com/manual/online-store/themes",
+    "theme_support_url": "https://support.shopify.com/"
+},
+{
+    "name": "store settings",
+    "settings": [
+        {
+            "type": "image_picker",
+            "label": "Add Logo Image",
+            "id": "store_logo"
+        }
+    ]
+}
+
+]
