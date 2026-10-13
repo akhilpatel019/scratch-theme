@@ -1,0 +1,222 @@
+
+{% comment %}
+  Simple Buy Box
+  Hardcoded demo content with a Swiper thumbnail gallery.
+  Replace the variant ID before testing cart functionality.
+{% endcomment %}
+
+
+
+{{ 'buy-box.css' | asset_url | stylesheet_tag }}
+{{ 'base.css' | asset_url | stylesheet_tag }}
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+>
+
+
+<section id="simple-buy-box-{{ section.id }}" class="simple-buy-box page_width">
+
+  <!-- LEFT: IMAGE GALLERY -->
+  <div class="simple-gallery">
+
+    <div class="swiper simple-main-slider">
+      <div class="swiper-wrapper">
+
+        <div class="swiper-slide">
+          <img
+            src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=1000&q=85"
+            alt="Red sneaker"
+            width="1000"
+            height="1000"
+            fetchpriority="high"
+          >
+        </div>
+
+        <div class="swiper-slide">
+          <img
+            src="https://images.unsplash.com/photo-1549298916-b41d501d3772?auto=format&fit=crop&w=1000&q=85"
+            alt="Casual sneaker side view"
+            width="1000"
+            height="1000"
+            loading="lazy"
+          >
+        </div>
+
+        <div class="swiper-slide">
+          <img
+            src="https://images.unsplash.com/photo-1608231387042-66d1773070a5?auto=format&fit=crop&w=1000&q=85"
+            alt="Sport shoe detail"
+            width="1000"
+            height="1000"
+            loading="lazy"
+          >
+        </div>
+
+        <div class="swiper-slide">
+          <img
+            src="https://images.unsplash.com/photo-1460353581641-37baddab0fa2?auto=format&fit=crop&w=1000&q=85"
+            alt="Sneaker product view"
+            width="1000"
+            height="1000"
+            loading="lazy"
+          >
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Thumbnails -->
+    <div class="swiper simple-thumb-slider">
+      <div class="swiper-wrapper">
+
+        <div class="swiper-slide">
+          <img
+            src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=220&q=75"
+            alt="Show main image 1"
+            width="220"
+            height="220"
+            loading="lazy"
+          >
+        </div>
+
+        <div class="swiper-slide">
+          <img
+            src="https://images.unsplash.com/photo-1549298916-b41d501d3772?auto=format&fit=crop&w=220&q=75"
+            alt="Show main image 2"
+            width="220"
+            height="220"
+            loading="lazy"
+          >
+        </div>
+
+        <div class="swiper-slide">
+          <img
+            src="https://images.unsplash.com/photo-1608231387042-66d1773070a5?auto=format&fit=crop&w=220&q=75"
+            alt="Show main image 3"
+            width="220"
+            height="220"
+            loading="lazy"
+          >
+        </div>
+
+        <div class="swiper-slide">
+          <img
+            src="https://images.unsplash.com/photo-1460353581641-37baddab0fa2?auto=format&fit=crop&w=220&q=75"
+            alt="Show main image 4"
+            width="220"
+            height="220"
+            loading="lazy"
+          >
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- RIGHT: PRODUCT DETAILS -->
+  <div class="simple-product-info">
+
+    <h1>Everyday Runner Sneakers</h1>
+
+    <div class="simple-product-description">
+      Lightweight everyday sneakers with a comfortable fit and a clean,
+      versatile design. Perfect for daily walks and casual outfits.
+    </div>
+
+    <div class="simple-product-price">₹2,499.00</div>
+
+    <form action="{{ routes.cart_add_url }}" method="post">
+      <!-- Replace with a real variant ID from your store -->
+      <input type="hidden" name="id" value="REPLACE_WITH_VARIANT_ID">
+      <input type="hidden" name="quantity" value="1">
+
+      <div class="simple-buy-buttons">
+        <button type="submit" class="simple-add-button">
+          Add to cart
+        </button>
+
+        <button
+          type="submit"
+          class="simple-buy-now-button"
+          formaction="{{ routes.cart_add_url }}?return_to=/checkout"
+        >
+          Buy it now
+        </button>
+      </div>
+    </form>
+
+  </div>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js" defer></script>
+
+<script>
+  (() => {
+    const sectionId = 'simple-buy-box-{{ section.id }}';
+
+    function initSimpleBuyBox() {
+      const section = document.getElementById(sectionId);
+
+      if (!section || section.dataset.swiperInitialized === 'true') return;
+
+      if (typeof Swiper === 'undefined') {
+        setTimeout(initSimpleBuyBox, 150);
+        return;
+      }
+
+      const mainElement = section.querySelector('.simple-main-slider');
+      const thumbElement = section.querySelector('.simple-thumb-slider');
+
+      if (!mainElement || !thumbElement) return;
+
+      section.dataset.swiperInitialized = 'true';
+
+      const thumbSwiper = new Swiper(thumbElement, {
+        slidesPerView: 'auto',
+        spaceBetween: 10,
+        watchSlidesProgress: true,
+        slideToClickedSlide: true,
+        observer: true,
+        observeParents: true
+      });
+
+      new Swiper(mainElement, {
+        slidesPerView: 1,
+        spaceBetween: 0,
+        observer: true,
+        observeParents: true,
+        thumbs: {
+          swiper: thumbSwiper
+        }
+      });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initSimpleBuyBox);
+    } else {
+      initSimpleBuyBox();
+    }
+
+    document.addEventListener('shopify:section:load', function (event) {
+      if (event.detail && event.detail.sectionId === '{{ section.id }}') {
+        const section = document.getElementById(sectionId);
+        if (section) section.dataset.swiperInitialized = 'false';
+        initSimpleBuyBox();
+      }
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Simple Buy Box",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Simple Buy Box"
+    }
+  ]
+}
+{% endschema %}
