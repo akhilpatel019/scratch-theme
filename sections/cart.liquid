@@ -1,0 +1,161 @@
+{{ 'cart.css' | asset_url | stylesheet_tag }}
+
+{{ 'base.css' | asset_url | stylesheet_tag }}
+
+<div class="custom-cart page_width">
+  <div class="custom-cart__container">
+    <h1 class="custom-cart__heading">Your Cart</h1>
+
+    {% if cart.item_count > 0 %}
+
+      <form action="{{ routes.cart_url }}" method="post" id="CustomCartForm">
+        <div class="custom-cart__layout">
+
+          <!-- Cart Items -->
+          <div class="custom-cart__items">
+
+            {% for item in cart.items %}
+              <div class="custom-cart__item">
+
+                <!-- Product Image -->
+                <a href="{{ item.url }}" class="custom-cart__image">
+                  {% if item.image %}
+                    <img
+                      src="{{ item.image | image_url: width: 400 }}"
+                      alt="{{ item.image.alt | default: item.product.title | escape }}"
+                      width="200"
+                      height="200"
+                    >
+                  {% endif %}
+                </a>
+
+                <!-- Product Details -->
+                <div class="custom-cart__details">
+                  <a href="{{ item.url }}" class="custom-cart__title">
+                    {{ item.product.title }}
+                  </a>
+
+                  {% unless item.product.has_only_default_variant %}
+                    <p class="custom-cart__variant">
+                      {{ item.variant.title }}
+                    </p>
+                  {% endunless %}
+
+                  <p class="custom-cart__price">
+                    {{ item.final_price | money }}
+                  </p>
+
+                  <!-- Quantity -->
+                  <div class="custom-cart__quantity">
+                    <label for="Quantity-{{ forloop.index }}">
+                      Quantity
+                    </label>
+
+                    <input
+                      id="Quantity-{{ forloop.index }}"
+                      type="number"
+                      name="updates[]"
+                      value="{{ item.quantity }}"
+                      min="0"
+                      {% if item.variant.quantity_rule.min %}
+                        min="{{ item.variant.quantity_rule.min }}"
+                      {% endif %}
+                      {% if item.variant.quantity_rule.max %}
+                        max="{{ item.variant.quantity_rule.max }}"
+                      {% endif %}
+                    >
+                  </div>
+
+                  <!-- Remove Product -->
+                  <a
+                    href="{{ routes.cart_change_url }}?line={{ forloop.index }}&quantity=0"
+                    class="custom-cart__remove"
+                  >
+                    Remove
+                  </a>
+                </div>
+
+                <!-- Line Total -->
+                <div class="custom-cart__line-price">
+                  {{ item.final_line_price | money }}
+                </div>
+
+              </div>
+            {% endfor %}
+
+            <button
+              type="submit"
+              name="update"
+              class="custom-cart__update"
+            >
+              Update Cart
+            </button>
+
+          </div>
+
+          <!-- Order Summary -->
+          <div class="custom-cart__summary">
+            <h2>Order Summary</h2>
+
+            <div class="custom-cart__summary-row">
+              <span>Items</span>
+              <span>{{ cart.item_count }}</span>
+            </div>
+
+            <div class="custom-cart__summary-row">
+              <span>Subtotal</span>
+              <span>{{ cart.total_price | money }}</span>
+            </div>
+
+            <p class="custom-cart__note">
+              Taxes and shipping are calculated at checkout.
+            </p>
+
+            <button
+              type="submit"
+              name="checkout"
+              class="custom-cart__checkout"
+            >
+              Proceed to Checkout
+            </button>
+
+            <a href="{{ routes.all_products_collection_url }}" class="custom-cart__continue">
+              Continue Shopping
+            </a>
+          </div>
+
+        </div>
+      </form>
+
+    {% else %}
+
+      <!-- Empty Cart -->
+      <div class="custom-cart__empty">
+        <h2>Your cart is empty</h2>
+        <p>Looks like you haven't added anything to your cart yet.</p>
+
+        <a
+          href="{{ routes.all_products_collection_url }}"
+          class="custom-cart__checkout"
+        >
+          Continue Shopping
+        </a>
+      </div>
+
+    {% endif %}
+  </div>
+</div>
+
+
+
+{% schema %}
+{
+  "name": "Custom cart",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Custom cart"
+    }
+  ]
+}
+{% endschema %}
