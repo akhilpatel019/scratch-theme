@@ -3,8 +3,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Scratch Theme</title>
+
+    {{ 'base.css' | asset_url | stylesheet_tag }}
+
+{% style %} 
+
+    *{
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    html body{
+        height: 100%;
+        width: 100%;
+    }
+
+    :root{
+            --page-width: {{settings.page_width}}px;
+            --padding-top: {{ settings.desktop_padding_top }}px;
+            --padding-bottom: {{ settings.desktop_padding_bottom }}px;
+        --padding-left: {{ settings.desktop_padding_left }}px;
+        --padding-right: {{ settings.desktop_padding_right }}px;
+    }
+
+     @media screen and (max-width: 749px) {
+    :root {
+      --padding-top: {{ settings.mobile_padding_top }}px;
+      --padding-bottom: {{ settings.mobile_padding_bottom }}px;
+      --padding-left: {{ settings.mobile_padding_left }}px;
+      --padding-right: {{ settings.mobile_padding_right }}px;
+    }
+  }
+
+
+{% endstyle %}
+
     {{content_for_header}}
+
 </head>
+
+
+
 <body>
 
 {{content_for_layout}}

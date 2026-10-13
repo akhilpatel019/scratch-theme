@@ -14,7 +14,109 @@
             "type": "image_picker",
             "label": "Add Logo Image",
             "id": "store_logo"
-        }
+        },
+        {
+            "type": "header",
+            "content": "Set Page Width"
+        },
+        {
+            "type": "range",
+            "id": "page_width",
+            "label": "Page Width",
+            "max": 1400,
+            "min": 1000,
+            "step": 100,
+            "default": 1200,
+            "unit": "px"
+        },
+         {
+      "type": "header",
+      "content": "Desktop Spacing"
+    },
+    {
+      "type": "range",
+      "id": "desktop_padding_top",
+      "label": "Padding Top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "default": 8,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "desktop_padding_bottom",
+      "label": "Padding Bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "default": 8,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "desktop_padding_left",
+      "label": "Padding Left",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "default": 4,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "desktop_padding_right",
+      "label": "Padding Right",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "default": 4,
+      "unit": "px"
+    },
+    {
+      "type": "header",
+      "content": "Mobile Spacing"
+    },
+    {
+      "type": "range",
+      "id": "mobile_padding_top",
+      "label": "Padding Top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "default": 4,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "mobile_padding_bottom",
+      "label": "Padding Bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "default": 4,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "mobile_padding_left",
+      "label": "Padding Left",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "default": 4,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "mobile_padding_right",
+      "label": "Padding Right",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "default": 4,
+      "unit": "px"
+    }
     ]
 }
 

@@ -9,20 +9,17 @@
  */
 {
   "sections": {
-    "heading": {
-      "type": "heading",
-      "settings": {
-        "text": "Add text"
-      }
-    },
     "featured_collection_mbA9Mz": {
       "type": "featured-collection",
       "name": "Featured Collection",
-      "settings": {}
+      "settings": {
+        "section_title": "Featured Collection",
+        "section_label": "OUR FAVORITES",
+        "section_desc": "Discover our most-loved styles, picked just for you."
+      }
     }
   },
   "order": [
-    "heading",
     "featured_collection_mbA9Mz"
   ]
 }

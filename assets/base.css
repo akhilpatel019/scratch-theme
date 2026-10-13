@@ -1,0 +1,14 @@
+.page_width {
+  width: 100%;
+  max-width: var(--page-width, 1200px);
+  margin: 0 auto;
+  box-sizing: border-box;
+
+  padding-top: var(--padding-top);
+  padding-bottom: var(--padding-bottom);
+  padding-left: var(--padding-left);
+  padding-right: var(--padding-right);
+}
+
+
+
