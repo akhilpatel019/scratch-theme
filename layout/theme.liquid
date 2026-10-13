@@ -19,12 +19,17 @@
         width: 100%;
     }
 
+    {{ settings.heading_font | font_face }}
+     {{ settings.body_font | font_face }}
+
     :root{
             --page-width: {{settings.page_width}}px;
             --padding-top: {{ settings.desktop_padding_top }}px;
             --padding-bottom: {{ settings.desktop_padding_bottom }}px;
         --padding-left: {{ settings.desktop_padding_left }}px;
         --padding-right: {{ settings.desktop_padding_right }}px;
+        --heading-font: {{settings.heading_font.family}};
+         --body-font: {{settings.body_font.family}};
     }
 
      @media screen and (max-width: 749px) {

@@ -116,6 +116,19 @@
       "step": 4,
       "default": 4,
       "unit": "px"
+    },
+      {
+      "type": "font_picker",
+      "id": "heading_font",
+      "label": "Heading Font",
+      "default": "assistant_n4"
+    },
+
+    {
+      "type": "font_picker",
+      "id": "body_font",
+      "label": "Body Font",
+      "default": "assistant_n4"
     }
     ]
 }

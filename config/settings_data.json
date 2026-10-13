@@ -18,6 +18,8 @@
     "mobile_padding_bottom": 40,
     "mobile_padding_left": 16,
     "mobile_padding_right": 16,
+    "heading_font": "playfair_display_n4",
+    "body_font": "lato_n4",
     "content_for_index": []
   }
 }
