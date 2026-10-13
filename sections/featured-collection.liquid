@@ -1,4 +1,6 @@
 <section class="featured-collection page_width">
+
+
   <div class="collection-header">
     <div>
       <p class="collection-subtitle">{{section.settings.section_label}}</p>
@@ -12,77 +14,30 @@
 
   <div class="collection-grid">
 
+
+
+      {% for collection_product in section.settings.featured_collection.products limit: section.settings.product_limit %}
+
+
     <!-- Product 1 -->
     <div class="product-card">
       <div class="product-image">
         <img
-          src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600"
-          alt="Classic wristwatch"
+          src="{{collection_product.featured_image |  image_url: width: 300}}"
+          alt="{{collection_product.title}}"
         >
       </div>
       <div class="product-info">
-        <p class="product-vendor">TIMELESS</p>
-        <h3>Classic Minimal Watch</h3>
+        <p class="product-vendor">{{collection_product.vendor}}</p>
+        <h3>{{collection_product.title}}</h3>
         <div class="product-price">
-          <span class="current-price">$89.00</span>
+          <span class="current-price">{{collection_product.price |  money}}</span>
         </div>
-        <a href="/cart" class="add-to-cart">Add to Cart</a>
+        <a href="{{collection_product.url}}" class="add-to-cart">See Options</a>
       </div>
     </div>
 
-    <!-- Product 2 -->
-    <div class="product-card">
-      <div class="product-image">
-        <img
-          src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600"
-          alt="Red sports sneaker"
-        >
-      </div>
-      <div class="product-info">
-        <p class="product-vendor">ACTIVEWEAR</p>
-        <h3>Everyday Sneakers</h3>
-        <div class="product-price">
-          <span class="current-price">$75.00</span>
-        </div>
-        <a href="/cart" class="add-to-cart">Add to Cart</a>
-      </div>
-    </div>
-
-    <!-- Product 3 -->
-    <div class="product-card">
-      <div class="product-image">
-        <img
-          src="https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=600"
-          alt="Stylish leather handbag"
-        >
-      </div>
-      <div class="product-info">
-        <p class="product-vendor">ESSENTIALS</p>
-        <h3>Everyday Leather Bag</h3>
-        <div class="product-price">
-          <span class="current-price">$95.00</span>
-        </div>
-        <a href="/cart" class="add-to-cart">Add to Cart</a>
-      </div>
-    </div>
-
-    <!-- Product 4 -->
-    <div class="product-card">
-      <div class="product-image">
-        <img
-          src="https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=600"
-          alt="Vintage film camera"
-        >
-      </div>
-      <div class="product-info">
-        <p class="product-vendor">CREATIVE GEAR</p>
-        <h3>Vintage Film Camera</h3>
-        <div class="product-price">
-          <span class="current-price">$110.00</span>
-        </div>
-        <a href="/cart" class="add-to-cart">Add to Cart</a>
-      </div>
-    </div>
+   {%endfor%}
 
   </div>
 </section>
@@ -112,7 +67,18 @@
         "id": "section_desc",
         "label": "Section Description",
         "default": " Discover our most-loved styles, picked just for you."
-    }
+    },
+    {
+      "type": "collection",
+      "id": "featured_collection",
+      "label": "Select Collection"
+    },
+   {
+  "type": "number",
+  "id": "product_limit",
+  "label": "Set Limit of Products",
+  "default": 4
+}
    ],
    "blocks": [],
    "presets": [

@@ -15,7 +15,9 @@
       "settings": {
         "section_title": "Featured Collection",
         "section_label": "OUR FAVORITES",
-        "section_desc": "Discover our most-loved styles, picked just for you."
+        "section_desc": "Discover our most-loved styles, picked just for you.",
+        "featured_collection": "all",
+        "product_limit": 8
       }
     }
   },
