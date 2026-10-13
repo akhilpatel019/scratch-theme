@@ -84,9 +84,13 @@
   }
 
   .custom-cart__remove {
-    color: #666666;
+    color:  red;
     font-size: 13px;
     text-decoration: underline;
+  }
+
+  .custom-cart__remove:hover{
+    color: #666666;
   }
 
   .custom-cart__line-price {
