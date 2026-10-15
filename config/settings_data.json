@@ -9,6 +9,7 @@
  */
 {
   "current": {
+    "store_logo": "shopify://shop_images/001-nike-logos-swoosh-black-Photoroom.png",
     "page_width": 1200,
     "desktop_padding_top": 60,
     "desktop_padding_bottom": 60,
@@ -20,6 +21,16 @@
     "mobile_padding_right": 16,
     "heading_font": "playfair_display_n4",
     "body_font": "lato_n4",
+    "sections": {
+      "custom-header": {
+        "type": "custom-header",
+        "settings": {
+          "header_menu": "main-menu",
+          "mega_menu_img": "shopify://shop_images/Free-Nike-Sneaker-Mockup-PSD.avif",
+          "header-max-width": 1200
+        }
+      }
+    },
     "content_for_index": []
   }
 }

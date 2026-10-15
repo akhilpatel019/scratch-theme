@@ -1,0 +1,181 @@
+{{ 'header.css' | asset_url | stylesheet_tag }}
+{{ 'base.css' | asset_url | stylesheet_tag }}
+
+{% style  %} 
+
+
+.custom-header-wrapper {
+    max-width: {{section.settings.header-max-width}}
+}
+
+
+{% endstyle %}
+
+<header class="custom-header">
+
+<div class="custom-header-wrapper">
+  <!-- Left: Logo -->
+  <div class="custom-header__logo">
+    <a href="/" aria-label="Home">
+
+    {%if settings.store_logo != blank%}
+
+        <img src="{{settings.store_logo |  image_url: width: 150}}" alt="{{shop.name}}">
+
+        {% else %}
+      <img
+        src="https://placehold.co/160x50?text=YOUR+LOGO"
+        alt="Store logo"
+        width="160"
+        height="50"
+      >
+
+    {% endif %}
+    </a>
+  </div>
+
+  <!-- Center: Navigation -->
+  <nav class="custom-header__nav" aria-label="Main navigation">
+<ul class="custom-header__menu">
+  {% for link in section.settings.header_menu.links %}
+    {% if link.title == 'Collection' %}
+      <li class="custom-header__mega-item">
+        <a href="{{ link.url }}" class="custom-header__mega-trigger">
+          {{ link.title }}
+          <span class="custom-header__chevron"></span>
+        </a>
+
+        <div class="custom-header__mega-menu">
+          <!-- First Collection List -->
+          <div class="custom-header__mega-column">
+            <h3>Shop by Category</h3>
+            <a href="/collections/all">All Products</a>
+            <a href="/collections/new-arrivals">New Arrivals</a>
+            <a href="/collections/best-sellers">Best Sellers</a>
+          </div>
+
+          <!-- Second Collection List -->
+          <div class="custom-header__mega-column">
+            <h3>Featured Collections</h3>
+            <a href="/collections/featured">Featured Products</a>
+            <a href="/collections/sale">Sale</a>
+            <a href="/collections/popular">Popular Products</a>
+          </div>
+
+          <!-- Featured Image -->
+          <div class="custom-header__mega-image">
+            <a href="/collections/all">
+
+            {% if section.settings.mega_menu_img != blank %}
+                <img
+                src="{{section.settings.mega_menu_img |  image_url: width:500}}"
+                alt="Featured collection"
+                width="500"
+                height="320"
+                loading="lazy"
+              >
+
+              {% else %}
+              <img
+                src="https://placehold.co/500x320?text=Featured+Collection"
+                alt="Featured collection"
+                width="500"
+                height="320"
+                loading="lazy"
+              >
+            {% endif %}
+            </a>
+
+            <p>Discover Our Collection</p>
+            <a class="custom-header__mega-cta" href="/collections/all">
+              Explore Now →
+            </a>
+          </div>
+        </div>
+      </li>
+    {% else %}
+      <li>
+        <a href="{{ link.url }}">{{ link.title }}</a>
+      </li>
+    {% endif %}
+  {% endfor %}
+</ul>
+  </nav>
+
+  <!-- Right: Cart and Account -->
+  <div class="custom-header__actions">
+
+    <!-- Existing cart snippet: no additional styling applied -->
+    {% render 'custom-cart-drawer' %}
+
+    <!-- User Icon -->
+    <a
+      class="custom-header__account"
+      href="{{ routes.account_url }}"
+      aria-label="My account"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="23"
+        height="23"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.7"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <circle cx="12" cy="8" r="4"></circle>
+        <path d="M5 21v-2a7 7 0 0 1 14 0v2"></path>
+      </svg>
+    </a>
+
+  </div>
+</div>
+
+
+</header>
+
+
+
+{% schema  %} 
+
+{
+    "name": "Header",
+    "limit": 1,
+    "settings": [
+        {
+            "type": "header",
+            "content": "Header Settings"
+        },
+                        {
+                "type": "link_list",
+                "id": "header_menu",
+                "label": "Select Menu"
+                },
+                {
+                    "type": "image_picker",
+                    "id": "mega_menu_img",
+                    "label": "Mega Menu Image"
+                },
+                {
+                    "type": "range",
+                    "id": "header-max-width",
+                    "label": "Set Header Max Width",
+                    "max": 1400,
+                    "min": 1200,
+                    "step": 100,
+                    "default": 1300
+                }
+    ],
+    "blocks": [],
+    "presets": [
+        {
+            "name": "Header"
+        }
+    ]
+}
+
+{% endschema %}
+
