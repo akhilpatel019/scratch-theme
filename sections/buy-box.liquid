@@ -64,30 +64,18 @@
 
     <div class="simple-product-price">{{ product_var.price | money }}</div>
 
-    <form action="{{ routes.cart_add_url }}" method="post">
+    <form action="{{ routes.cart_add_url }}" method="post" class="simple-product-form">
       <!-- Replace with a real variant ID from your store -->
       <input type="hidden" name="id" value="{{product_var.selected_or_first_available_variant.id}}">
 
-      <div class="simple-quantity-selector">
-        <label for="quantity" class="quantity-label">Quantity</label>
-        <div class="quantity-controls">
-          <button
-            type="button"
-            class="quantity-btn minus"
-            onclick="const input = this.nextElementSibling; if (input.value > 1) input.value--;"
-          >
-            -
-          </button>
-          <input type="number" id="quantity" name="quantity" value="1" min="1" class="quantity-input">
-          <button
-            type="button"
-            class="quantity-btn plus"
-            onclick="const input = this.previousElementSibling; input.value++;"
-          >
-            +
-          </button>
-        </div>
-      </div>
+    
+{% for block in section.blocks %}
+  {% case block.type %}
+    {% when 'quantity-selector' %}
+      {% render 'quantity-selector', block: block %}
+  {% endcase %}
+{% endfor %}
+
 
       <div class="simple-buy-buttons">
         <button type="submit" class="simple-add-button">Add to cart</button>
@@ -100,6 +88,8 @@
           Buy it now
         </button>
       </div>
+
+      
     </form>
   </div>
 </section>
@@ -161,12 +151,107 @@
       }
     });
   })();
+
+
+  
+
+document.querySelectorAll(".simple-product-form").forEach(function (form) {
+  if (form.dataset.ajaxInitialized === "true") return;
+  form.dataset.ajaxInitialized = "true";
+
+  form.addEventListener("submit", async function (event) {
+    // Keep Buy Now's normal checkout behavior
+    if (event.submitter?.classList.contains("simple-buy-now-button")) {
+      return;
+    }
+
+    event.preventDefault();
+
+    const addButton = form.querySelector(".simple-add-button");
+    if (addButton) addButton.disabled = true;
+
+    try {
+      const formData = new FormData(form);
+
+      const response = await fetch(
+        `${window.Shopify.routes.root}cart/add.js`,
+        {
+          method: "POST",
+          body: formData,
+          headers: {
+            Accept: "application/json"
+          }
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.description || data.message || "Could not add product.");
+      }
+
+      // Request freshly rendered cart drawer HTML
+      const sectionResponse = await fetch(
+        `${window.Shopify.routes.root}?sections=custom-cart-drawer-section`
+      );
+
+      if (!sectionResponse.ok) {
+        throw new Error("Could not refresh the cart drawer.");
+      }
+
+      const sections = await sectionResponse.json();
+      const updatedHTML = sections["custom-cart-drawer-section"];
+
+      if (!updatedHTML) {
+        throw new Error("The cart drawer section returned no HTML.");
+      }
+
+      const parser = new DOMParser();
+      const newDocument = parser.parseFromString(updatedHTML, "text/html");
+
+      const currentDrawer = document.querySelector("[data-ccd-drawer]");
+      const newDrawer = newDocument.querySelector("[data-ccd-drawer]");
+
+      if (!currentDrawer || !newDrawer) {
+        throw new Error("Could not find the cart drawer in the updated HTML.");
+      }
+
+      // Replace the drawer's content with the fresh Liquid-rendered content
+      currentDrawer.innerHTML = newDrawer.innerHTML;
+
+      // Open the drawer
+      currentDrawer.classList.add("active");
+
+      const overlay = document.querySelector("[data-ccd-overlay]");
+      if (overlay) overlay.classList.add("active");
+
+    } catch (error) {
+      console.error("Cart error:", error);
+    } finally {
+      if (addButton) addButton.disabled = false;
+    }
+  });
+});
+
+
+
+
+
+
+
 </script>
 
 {% schema %}
 {
   "name": "Simple Buy Box",
   "settings": [],
+  "blocks": [
+    {
+      "type": "quantity-selector",
+      "limit": 1,
+      "name": "Quantity Selector"
+    }
+  ],
   "presets": [
     {
       "name": "Simple Buy Box"

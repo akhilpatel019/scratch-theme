@@ -11,6 +11,15 @@
   "sections": {
     "main": {
       "type": "buy-box",
+      "blocks": {
+        "quantity_selector_tBRchH": {
+          "type": "quantity-selector",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "quantity_selector_tBRchH"
+      ],
       "settings": {}
     }
   },

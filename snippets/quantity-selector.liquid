@@ -1,0 +1,20 @@
+<div class="simple-quantity-selector">
+        <label for="quantity" class="quantity-label">Quantity</label>
+        <div class="quantity-controls">
+          <button
+            type="button"
+            class="quantity-btn minus"
+            onclick="const input = this.nextElementSibling; if (input.value > 1) input.value--;"
+          >
+            -
+          </button>
+          <input type="number" id="quantity" name="quantity" value="1" min="1" class="quantity-input">
+          <button
+            type="button"
+            class="quantity-btn plus"
+            onclick="const input = this.previousElementSibling; input.value++;"
+          >
+            +
+          </button>
+        </div>
+</div>
