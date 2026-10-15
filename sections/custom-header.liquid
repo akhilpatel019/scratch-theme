@@ -66,7 +66,7 @@
   {% for link in section.settings.header_menu.links %}
     {% if link.title == 'Collection' %}
       <li class="custom-header__mega-item">
-        <a href="{{ link.url }}" class="custom-header__mega-trigger">
+        <a href="{{ link.url }}" class="custom-header__mega-trigger {%- if link.active -%}active{%- endif -%}">
           {{ link.title }}
           <span class="custom-header__chevron"></span>
         </a>
@@ -121,7 +121,7 @@
       </li>
     {% else %}
       <li>
-        <a href="{{ link.url }}">{{ link.title }}</a>
+        <a href="{{ link.url }}" class="{%- if link.active -%}active{%- endif -%}">{{ link.title }}</a>
       </li>
     {% endif %}
   {% endfor %}

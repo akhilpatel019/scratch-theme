@@ -30,6 +30,10 @@
   text-decoration: none;
 }
 
+.custom-header__menu li a.active {
+  color: #e62e2d;
+}
+
 /* Logo */
 
 .custom-header__logo {
