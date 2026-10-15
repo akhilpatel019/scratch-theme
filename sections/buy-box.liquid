@@ -138,10 +138,41 @@
     });
   }
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initSimpleBuyBox);
-  } else {
+  function initAddButtonLoader() {
+    const section = document.getElementById(sectionId);
+    if (!section) return;
+
+    const form = section.querySelector('.simple-product-form');
+    const addButton = section.querySelector('.simple-add-button');
+    if (!form || !addButton) return;
+
+    form.addEventListener('submit', function(event) {
+      if (event.submitter && event.submitter.classList.contains('simple-buy-now-button')) {
+        return;
+      }
+      addButton.classList.add('loading');
+    });
+
+    const observer = new MutationObserver(function() {
+      if (addButton.disabled) {
+        addButton.classList.add('loading');
+      } else {
+        addButton.classList.remove('loading');
+      }
+    });
+
+    observer.observe(addButton, { attributes: true, attributeFilter: ['disabled'] });
+  }
+
+  function initSection() {
     initSimpleBuyBox();
+    initAddButtonLoader();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initSection);
+  } else {
+    initSection();
   }
 
   document.addEventListener('shopify:section:load', function(event) {
@@ -152,11 +183,10 @@
         section.dataset.swiperInitialized = 'false';
       }
 
-      initSimpleBuyBox();
+      initSection();
     }
   });
 
- 
 })();
 
 </script>

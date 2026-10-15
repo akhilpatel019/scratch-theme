@@ -51,25 +51,50 @@
                       Quantity
                     </label>
 
-                    <input
-                      id="Quantity-{{ forloop.index }}"
-                      type="number"
-                      name="updates[]"
-                      value="{{ item.quantity }}"
-                      min="0"
-                      {% if item.variant.quantity_rule.min %}
-                        min="{{ item.variant.quantity_rule.min }}"
-                      {% endif %}
-                      {% if item.variant.quantity_rule.max %}
-                        max="{{ item.variant.quantity_rule.max }}"
-                      {% endif %}
-                    >
+                    <div class="custom-cart__quantity-controls">
+                      <button
+                        type="button"
+                        class="custom-cart__quantity-btn minus"
+                        data-action="decrease"
+                        data-line="{{ forloop.index }}"
+                        aria-label="Decrease quantity"
+                      >
+                        -
+                      </button>
+
+                      <input
+                        id="Quantity-{{ forloop.index }}"
+                        type="number"
+                        name="updates[]"
+                        value="{{ item.quantity }}"
+                        min="0"
+                        data-line="{{ forloop.index }}"
+                        class="custom-cart__quantity-input"
+                        {% if item.variant.quantity_rule.min %}
+                          min="{{ item.variant.quantity_rule.min }}"
+                        {% endif %}
+                        {% if item.variant.quantity_rule.max %}
+                          max="{{ item.variant.quantity_rule.max }}"
+                        {% endif %}
+                      >
+
+                      <button
+                        type="button"
+                        class="custom-cart__quantity-btn plus"
+                        data-action="increase"
+                        data-line="{{ forloop.index }}"
+                        aria-label="Increase quantity"
+                      >
+                        +
+                      </button>
+                    </div>
                   </div>
 
                   <!-- Remove Product -->
                   <a
                     href="{{ routes.cart_change_url }}?line={{ forloop.index }}&quantity=0"
                     class="custom-cart__remove"
+                    data-line="{{ forloop.index }}"
                   >
                     Remove
                   </a>
@@ -146,7 +171,145 @@
   </div>
 </div>
 
+<style>
 
+</style>
+
+<script>
+  (function() {
+    let isUpdating = false;
+
+    async function updateCart(line, quantity, loadingElement) {
+      if (isUpdating) return;
+      isUpdating = true;
+
+      if (loadingElement) {
+        loadingElement.classList.add('loading');
+      }
+
+      try {
+        const rootUrl = window.Shopify ? window.Shopify.routes.root : '/';
+        const response = await fetch(`${rootUrl}cart/change.js`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json'
+          },
+          body: JSON.stringify({
+            line: line,
+            quantity: quantity
+          })
+        });
+
+        const cart = await response.json();
+
+        if (!response.ok) {
+          throw new Error(cart.description || 'Could not update cart.');
+        }
+
+        // Update cart badge counts
+        document.querySelectorAll('.ccd-count').forEach(function(el) {
+          el.textContent = cart.item_count;
+        });
+
+        // Re-fetch current cart page to refresh all line items, totals, and empty state
+        const pageResponse = await fetch(window.location.href);
+        const pageHtml = await pageResponse.text();
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(pageHtml, 'text/html');
+
+        const currentContainer = document.querySelector('.custom-cart__container');
+        const newContainer = doc.querySelector('.custom-cart__container');
+
+        if (currentContainer && newContainer) {
+          currentContainer.innerHTML = newContainer.innerHTML;
+        }
+
+        // Sync cart drawer if present on page
+        const currentDrawer = document.querySelector('[data-ccd-drawer]');
+        const newDrawer = doc.querySelector('[data-ccd-drawer]');
+        if (currentDrawer && newDrawer) {
+          currentDrawer.innerHTML = newDrawer.innerHTML;
+        }
+      } catch (error) {
+        console.error('Cart update error:', error);
+        if (loadingElement) {
+          loadingElement.classList.remove('loading');
+        }
+      } finally {
+        isUpdating = false;
+      }
+    }
+
+    document.addEventListener('click', function(event) {
+      // Remove button click
+      const removeBtn = event.target.closest('.custom-cart__remove');
+      if (removeBtn && removeBtn.closest('.custom-cart')) {
+        event.preventDefault();
+        const line = Number(removeBtn.dataset.line);
+        if (line) {
+          updateCart(line, 0, removeBtn);
+        }
+        return;
+      }
+
+      // Quantity plus/minus click
+      const qtyBtn = event.target.closest('.custom-cart__quantity-btn');
+      if (qtyBtn && qtyBtn.closest('.custom-cart')) {
+        event.preventDefault();
+        const line = Number(qtyBtn.dataset.line);
+        const action = qtyBtn.dataset.action;
+        const controls = qtyBtn.closest('.custom-cart__quantity-controls');
+        const input = controls ? controls.querySelector('.custom-cart__quantity-input') : null;
+
+        if (!line || !input) return;
+
+        const currentVal = parseInt(input.value, 10) || 0;
+        const min = input.min !== '' ? parseInt(input.min, 10) : 0;
+        const max = input.max !== '' ? parseInt(input.max, 10) : Infinity;
+
+        let newVal = action === 'increase' ? currentVal + 1 : currentVal - 1;
+
+        if (newVal < min) newVal = min;
+        if (newVal > max) newVal = max;
+
+        if (newVal !== currentVal) {
+          updateCart(line, newVal, qtyBtn);
+        }
+      }
+    });
+
+    document.addEventListener('change', function(event) {
+      const input = event.target.closest('.custom-cart__quantity-input');
+      if (input && input.closest('.custom-cart')) {
+        const line = Number(input.dataset.line);
+        if (!line) return;
+
+        let val = parseInt(input.value, 10);
+        if (isNaN(val) || val < 0) val = 0;
+
+        const min = input.min !== '' ? parseInt(input.min, 10) : 0;
+        const max = input.max !== '' ? parseInt(input.max, 10) : Infinity;
+
+        if (val < min) val = min;
+        if (val > max) val = max;
+
+        const controls = input.closest('.custom-cart__quantity-controls');
+        updateCart(line, val, controls);
+      }
+    });
+
+    document.addEventListener('keydown', function(event) {
+      if (event.key === 'Enter') {
+        const input = event.target.closest('.custom-cart__quantity-input');
+        if (input && input.closest('.custom-cart')) {
+          event.preventDefault();
+          input.blur();
+        }
+      }
+    });
+  })();
+</script>
 
 {% schema %}
 {

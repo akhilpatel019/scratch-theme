@@ -315,6 +315,31 @@
     color: #666;
    }
 
+  #custom-cart-drawer .ccd-remove.loading {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    opacity: 0.6;
+    pointer-events: none;
+    text-decoration: none;
+  }
+
+  #custom-cart-drawer .ccd-remove.loading::after {
+    content: "";
+    width: 10px;
+    height: 10px;
+    border: 1.5px solid currentColor;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: ccd-spin 0.6s linear infinite;
+  }
+
+  @keyframes ccd-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
 
 
   /* Empty Cart */

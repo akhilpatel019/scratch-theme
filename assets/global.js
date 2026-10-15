@@ -102,12 +102,15 @@
     const removeButton = event.target.closest('[data-cart-remove]');
 
     if (!removeButton) return;
+    if (removeButton.classList.contains('loading')) return;
 
     event.preventDefault();
 
     const line = Number(removeButton.dataset.line);
 
     if (!line) return;
+
+    removeButton.classList.add('loading');
 
     try {
       const response = await fetch(
@@ -173,6 +176,7 @@
 
     } catch (error) {
       console.error('Remove cart item error:', error);
+      removeButton.classList.remove('loading');
     }
   });
 

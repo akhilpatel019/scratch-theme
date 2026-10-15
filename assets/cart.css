@@ -219,3 +219,108 @@
       padding: 20px;
     }
   }
+
+
+
+
+
+  /* css for quantity selector and loader  */
+
+    .custom-cart__quantity-controls {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    height: 38px;
+    background: #fff;
+    overflow: hidden;
+  }
+
+  .custom-cart__quantity-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 100%;
+    border: none;
+    background: transparent;
+    color: #222;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 0;
+    transition: background 0.15s ease;
+  }
+
+  .custom-cart__quantity-btn:hover {
+    background: #f5f5f5;
+  }
+
+  .custom-cart__quantity-controls .custom-cart__quantity-input {
+    width: 48px;
+    height: 100%;
+    min-height: unset;
+    padding: 0 4px;
+    border: none;
+    border-left: 1px solid #eee;
+    border-right: 1px solid #eee;
+    border-radius: 0;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 600;
+    color: #222;
+    background: transparent;
+    -moz-appearance: textfield;
+  }
+
+  .custom-cart__quantity-controls .custom-cart__quantity-input::-webkit-outer-spin-button,
+  .custom-cart__quantity-controls .custom-cart__quantity-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  .custom-cart__quantity-btn.loading {
+    position: relative;
+    color: transparent !important;
+    pointer-events: none;
+  }
+
+  .custom-cart__quantity-btn.loading::after {
+    content: "";
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    border: 1.5px solid #222;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: custom-cart-spin 0.6s linear infinite;
+  }
+
+  .custom-cart__quantity-controls.loading {
+    opacity: 0.6;
+    pointer-events: none;
+  }
+
+  .custom-cart__remove.loading {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    opacity: 0.6;
+    pointer-events: none;
+    text-decoration: none;
+  }
+
+  .custom-cart__remove.loading::after {
+    content: "";
+    width: 10px;
+    height: 10px;
+    border: 1.5px solid currentColor;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: custom-cart-spin 0.6s linear infinite;
+  }
+
+  @keyframes custom-cart-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }

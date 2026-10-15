@@ -195,6 +195,34 @@
     cursor: not-allowed;
   }
 
+  .simple-buy-box .simple-add-button.loading {
+    position: relative;
+    color: transparent !important;
+    pointer-events: none;
+    opacity: 0.85;
+  }
+
+  .simple-buy-box .simple-add-button.loading::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 18px;
+    height: 18px;
+    margin-top: -9px;
+    margin-left: -9px;
+    border: 2px solid #fff;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: simple-buy-spin 0.6s linear infinite;
+  }
+
+  @keyframes simple-buy-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
   @media screen and (max-width: 749px) {
     .simple-buy-box {
       grid-template-columns: minmax(0, 1fr);
