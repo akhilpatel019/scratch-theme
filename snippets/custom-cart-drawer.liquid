@@ -57,7 +57,7 @@
 
               <a
                 href="{{ routes.cart_change_url }}?line={{ forloop.index }}&quantity=0"
-                class="ccd-remove"
+                class="ccd-remove" data-cart-remove data-line="{{ forloop.index }}"
               >
                 Remove
               </a>
