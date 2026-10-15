@@ -99,15 +99,7 @@
     white-space: nowrap;
   }
 
-  .custom-cart__update {
-    margin-top: 20px;
-    padding: 12px 20px;
-    border: 1px solid #222222;
-    border-radius: 4px;
-    background: #ffffff;
-    color: #222222;
-    cursor: pointer;
-  }
+
 
   .custom-cart__summary {
     padding: 25px;
