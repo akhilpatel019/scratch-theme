@@ -209,9 +209,22 @@
     padding: 6px 9px;
   }
 }
+/* Loading State */
+.collection-tabs-block .collection-grid-container {
+  transition: opacity 0.25s ease;
+}
+
+.collection-tabs-block.is-loading .collection-grid-container {
+  opacity: 0.4;
+  pointer-events: none;
+}
 </style>
 
-<section class="featured-collection page_width collection-tabs-block">
+<section
+  class="featured-collection page_width collection-tabs-block"
+  id="CollectionTabs-{{ block.id | default: 'main' }}"
+  data-block-id="{{ block.id | default: 'main' }}"
+>
   <div class="collection-header">
     <div>
       {% if block.settings.section_label != blank %}
@@ -246,94 +259,205 @@
     {% endfor %}
   </div>
 
+  <div class="collection-grid-container" id="CollectionGridContainer-{{ block.id | default: 'main' }}">
     {% paginate collection.products by block.settings.products_per_page %}
-    <div class="collection-grid">
-      {% for collection_product in collection.products %}
-        <div class="product-card">
-          <a
-            href="{{ collection_product.url }}"
-            class="product-card-image-link"
-          >
-            <div class="product-image">
-              {% if collection_product.featured_image %}
-                {{
-                  collection_product.featured_image
-                  | image_url: width: 600
-                  | image_tag:
-                    loading: 'lazy',
-                    widths: '300, 450, 600',
-                    alt: collection_product.featured_image.alt
-                }}
-              {% endif %}
-            </div>
-          </a>
-
-          <div class="product-info">
-            {% if collection_product.vendor != blank %}
-              <p class="product-vendor">
-                {{ collection_product.vendor | escape }}
-              </p>
-            {% endif %}
-
-            <h3>
-              <a href="{{ collection_product.url }}">
-                {{ collection_product.title | escape }}
-              </a>
-            </h3>
-
-            <div class="product-price">
-              <span class="current-price">
-                {{ collection_product.price | money }}
-              </span>
-            </div>
-
+      <div class="collection-grid">
+        {% for collection_product in collection.products %}
+          <div class="product-card">
             <a
               href="{{ collection_product.url }}"
-              class="open-product-btn"
+              class="product-card-image-link"
             >
-              See Options
+              <div class="product-image">
+                {% if collection_product.featured_image %}
+                  {{
+                    collection_product.featured_image
+                    | image_url: width: 600
+                    | image_tag:
+                      loading: 'lazy',
+                      widths: '300, 450, 600',
+                      alt: collection_product.featured_image.alt
+                  }}
+                {% endif %}
+              </div>
             </a>
-          </div>
-        </div>
-      {% else %}
-        <p>No products found in this collection.</p>
-      {% endfor %}
-    </div>
 
-    {% if paginate.pages > 1 %}
-      <nav class="collection-pagination" aria-label="Pagination">
-        {% if paginate.previous %}
-          <a href="{{ paginate.previous.url }}" class="pagination-link">
-            Previous
-          </a>
-        {% endif %}
-
-        {% for part in paginate.parts %}
-          {% if part.is_link %}
-            <a href="{{ part.url }}" class="pagination-link">
-              {{ part.title }}
-            </a>
-          {% else %}
-            <span
-              class="pagination-link{% if part.title == paginate.current_page %} current{% endif %}"
-              {% if part.title == paginate.current_page %}
-                aria-current="page"
+            <div class="product-info">
+              {% if collection_product.vendor != blank %}
+                <p class="product-vendor">
+                  {{ collection_product.vendor | escape }}
+                </p>
               {% endif %}
-            >
-              {{ part.title }}
-            </span>
-          {% endif %}
+
+              <h3>
+                <a href="{{ collection_product.url }}">
+                  {{ collection_product.title | escape }}
+                </a>
+              </h3>
+
+              <div class="product-price">
+                <span class="current-price">
+                  {{ collection_product.price | money }}
+                </span>
+              </div>
+
+              <a
+                href="{{ collection_product.url }}"
+                class="open-product-btn"
+              >
+                See Options
+              </a>
+            </div>
+          </div>
+        {% else %}
+          <p>No products found in this collection.</p>
         {% endfor %}
+      </div>
 
-        {% if paginate.next %}
-          <a href="{{ paginate.next.url }}" class="pagination-link">
-            Next
-          </a>
-        {% endif %}
-      </nav>
-    {% endif %}
-  {% endpaginate %}
+      {% if paginate.pages > 1 %}
+        <nav class="collection-pagination" aria-label="Pagination">
+          {% if paginate.previous %}
+            <a href="{{ paginate.previous.url }}" class="pagination-link">
+              Previous
+            </a>
+          {% endif %}
 
+          {% for part in paginate.parts %}
+            {% if part.is_link %}
+              <a href="{{ part.url }}" class="pagination-link">
+                {{ part.title }}
+              </a>
+            {% else %}
+              <span
+                class="pagination-link{% if part.title == paginate.current_page %} current{% endif %}"
+                {% if part.title == paginate.current_page %}
+                  aria-current="page"
+                {% endif %}
+              >
+                {{ part.title }}
+              </span>
+            {% endif %}
+          {% endfor %}
 
-  
+          {% if paginate.next %}
+            <a href="{{ paginate.next.url }}" class="pagination-link">
+              Next
+            </a>
+          {% endif %}
+        </nav>
+      {% endif %}
+    {% endpaginate %}
+  </div>
+
+  <script>
+    (function () {
+      var blockId = '{{ block.id | default: 'main' }}';
+      var sectionEl = document.getElementById('CollectionTabs-' + blockId) || document.querySelector('.collection-tabs-block');
+      if (!sectionEl) return;
+
+      var abortController = null;
+
+      // Initialize state for back/forward support
+      if (!history.state || !history.state.collectionUrl) {
+        history.replaceState({ collectionUrl: window.location.href }, '', window.location.href);
+      }
+
+      async function loadUrl(url, shouldPushState, isPagination) {
+        if (abortController) {
+          abortController.abort();
+        }
+        abortController = new AbortController();
+
+        sectionEl.classList.add('is-loading');
+        sectionEl.setAttribute('aria-busy', 'true');
+
+        try {
+          var response = await fetch(url, {
+            signal: abortController.signal,
+            headers: {
+              'X-Requested-With': 'XMLHttpRequest'
+            }
+          });
+
+          if (!response.ok) {
+            window.location.href = url;
+            return;
+          }
+
+          var html = await response.text();
+          var parser = new DOMParser();
+          var doc = parser.parseFromString(html, 'text/html');
+
+          var newSection = doc.getElementById('CollectionTabs-' + blockId) || doc.querySelector('.collection-tabs-block');
+          if (!newSection) {
+            window.location.href = url;
+            return;
+          }
+
+          var currentGridContainer = sectionEl.querySelector('.collection-grid-container');
+          var newGridContainer = newSection.querySelector('.collection-grid-container');
+          if (currentGridContainer && newGridContainer) {
+            currentGridContainer.innerHTML = newGridContainer.innerHTML;
+          }
+
+          var currentTabs = sectionEl.querySelector('.collection-tabs');
+          var newTabs = newSection.querySelector('.collection-tabs');
+          if (currentTabs && newTabs) {
+            currentTabs.innerHTML = newTabs.innerHTML;
+          }
+
+          if (doc.title) {
+            document.title = doc.title;
+          }
+
+          if (shouldPushState) {
+            history.pushState({ collectionUrl: url }, '', url);
+          }
+
+          if (isPagination) {
+            sectionEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        } catch (error) {
+          if (error.name !== 'AbortError') {
+            window.location.href = url;
+          }
+        } finally {
+          sectionEl.classList.remove('is-loading');
+          sectionEl.removeAttribute('aria-busy');
+        }
+      }
+
+      // Event delegation for tabs and pagination links
+      sectionEl.addEventListener('click', function (e) {
+        var tabLink = e.target.closest('.collection-tab');
+        var paginationLink = e.target.closest('.collection-pagination a, a.pagination-link');
+        var link = tabLink || paginationLink;
+
+        if (!link) return;
+
+        // Allow middle clicks, Ctrl/Cmd click, right clicks to open normally
+        if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) {
+          return;
+        }
+
+        var href = link.getAttribute('href');
+        if (!href || href.startsWith('#')) return;
+
+        // Skip if already on the requested page/tab
+        if (link.href === window.location.href) {
+          e.preventDefault();
+          return;
+        }
+
+        e.preventDefault();
+        loadUrl(link.href, true, Boolean(paginationLink));
+      });
+
+      // Handle browser Back / Forward buttons
+      window.addEventListener('popstate', function (e) {
+        var targetUrl = (e.state && e.state.collectionUrl) ? e.state.collectionUrl : window.location.href;
+        loadUrl(targetUrl, false, false);
+      });
+    })();
+  </script>
 </section>
