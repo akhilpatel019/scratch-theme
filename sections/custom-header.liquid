@@ -68,8 +68,8 @@
     {%- assign mega_menu_block = nil -%}
 
     {%- for block in section.blocks -%}
-      {%- if block.type == 'mega_menu' and block.settings.menu_item != blank -%}
-        {%- assign trigger_name = block.settings.menu_item | downcase | strip -%}
+      {%- if block.type == 'mega_menu' and block.settings.title != blank -%}
+        {%- assign trigger_name = block.settings.title | downcase | strip -%}
         {%- assign current_name = link.title | downcase | strip -%}
         {%- if trigger_name == current_name -%}
           {%- assign has_mega_menu = true -%}
@@ -149,8 +149,8 @@
         {%- assign mega_menu_block = nil -%}
 
         {%- for block in section.blocks -%}
-          {%- if block.type == 'mega_menu' and block.settings.menu_item != blank -%}
-            {%- assign trigger_name = block.settings.menu_item | downcase | strip -%}
+          {%- if block.type == 'mega_menu' and block.settings.title != blank -%}
+            {%- assign trigger_name = block.settings.title | downcase | strip -%}
             {%- assign current_name = link.title | downcase | strip -%}
             {%- if trigger_name == current_name -%}
               {%- assign has_mega_menu = true -%}
@@ -296,7 +296,7 @@
         "settings": [
           {
             "type": "text",
-            "id": "menu_item",
+            "id": "title",
             "label": "Menu Item Title",
             "info": "Enter the exact name of the menu item that should trigger this mega menu (e.g. Collection, Shop)."
           },

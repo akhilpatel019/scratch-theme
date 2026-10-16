@@ -107,7 +107,7 @@
           </a>
 
           <p>{{block.settings.mega_menu_image_title}}</p>
-          <a class="custom-header__mega-cta" href="{{ link.url }}">
+          <a class="custom-header__mega-cta" href="{{ block.settings.mega_menu_link_url | default: link.url }}">
             {{block.settings.mega_menu_link_title}} &rarr;
           </a>
         </div>
