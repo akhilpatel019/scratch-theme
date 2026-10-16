@@ -24,9 +24,25 @@
     "sections": {
       "custom-header": {
         "type": "custom-header",
+        "blocks": {
+          "mega_menu_qJFJ7q": {
+            "type": "mega_menu",
+            "settings": {
+              "menu_item": "Collection",
+              "mega_menu_1": "sneakers",
+              "mega_menu_2": "leather",
+              "mega_menu_img": "shopify://shop_images/Free-Nike-Sneaker-Mockup-PSD.avif",
+              "mega_menu_image_title": "Discover Our New Sneaker's Collection",
+              "mega_menu_link_url": "shopify://collections/sneakers",
+              "mega_menu_link_title": "Explore Collection"
+            }
+          }
+        },
+        "block_order": [
+          "mega_menu_qJFJ7q"
+        ],
         "settings": {
           "header_menu": "main-menu",
-          "mega_menu_img": "shopify://shop_images/Free-Nike-Sneaker-Mockup-PSD.avif",
           "header-max-width": 1200
         }
       }

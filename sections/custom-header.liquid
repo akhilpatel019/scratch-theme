@@ -64,61 +64,23 @@
   <nav class="custom-header__nav" aria-label="Main navigation">
 <ul class="custom-header__menu">
   {% for link in section.settings.header_menu.links %}
-    {% if link.title == 'Collection' %}
-      <li class="custom-header__mega-item">
-        <a href="{{ link.url }}" class="custom-header__mega-trigger {%- if link.active -%}active{%- endif -%}">
-          {{ link.title }}
-          <span class="custom-header__chevron"></span>
-        </a>
+    {%- assign has_mega_menu = false -%}
+    {%- assign mega_menu_block = nil -%}
 
-        <div class="custom-header__mega-menu">
-          <!-- First Collection List -->
-          <div class="custom-header__mega-column">
-            <h3>Shop by Category</h3>
-            <a href="/collections/all">All Products</a>
-            <a href="/collections/new-arrivals">New Arrivals</a>
-            <a href="/collections/best-sellers">Best Sellers</a>
-          </div>
+    {%- for block in section.blocks -%}
+      {%- if block.type == 'mega_menu' and block.settings.menu_item != blank -%}
+        {%- assign trigger_name = block.settings.menu_item | downcase | strip -%}
+        {%- assign current_name = link.title | downcase | strip -%}
+        {%- if trigger_name == current_name -%}
+          {%- assign has_mega_menu = true -%}
+          {%- assign mega_menu_block = block -%}
+          {%- break -%}
+        {%- endif -%}
+      {%- endif -%}
+    {%- endfor -%}
 
-          <!-- Second Collection List -->
-          <div class="custom-header__mega-column">
-            <h3>Featured Collections</h3>
-            <a href="/collections/featured">Featured Products</a>
-            <a href="/collections/sale">Sale</a>
-            <a href="/collections/popular">Popular Products</a>
-          </div>
-
-          <!-- Featured Image -->
-          <div class="custom-header__mega-image">
-            <a href="/collections/all">
-
-            {% if section.settings.mega_menu_img != blank %}
-                <img
-                src="{{section.settings.mega_menu_img |  image_url: width:500}}"
-                alt="Featured collection"
-                width="500"
-                height="320"
-                loading="lazy"
-              >
-
-              {% else %}
-              <img
-                src="https://placehold.co/500x320?text=Featured+Collection"
-                alt="Featured collection"
-                width="500"
-                height="320"
-                loading="lazy"
-              >
-            {% endif %}
-            </a>
-
-            <p>Discover Our Collection</p>
-            <a class="custom-header__mega-cta" href="/collections/all">
-              Explore Now →
-            </a>
-          </div>
-        </div>
-      </li>
+    {% if has_mega_menu and mega_menu_block != nil %}
+      {% render 'mega_menu', link: link, block: mega_menu_block, type: 'desktop' %}
     {% else %}
       <li>
         <a href="{{ link.url }}" class="{%- if link.active -%}active{%- endif -%}">{{ link.title }}</a>
@@ -183,63 +145,23 @@
   <div class="custom-header__mobile-body">
     <ul class="custom-header__mobile-menu">
       {% for link in section.settings.header_menu.links %}
-        {% if link.title == 'Collection' %}
-          <li class="custom-header__mobile-item custom-header__mobile-accordion" data-accordion>
-            <button
-              type="button"
-              class="custom-header__mobile-link custom-header__mobile-accordion-trigger"
-              data-accordion-trigger
-              aria-expanded="false"
-            >
-              <span>{{ link.title }}</span>
-              <span class="custom-header__mobile-chevron"></span>
-            </button>
+        {%- assign has_mega_menu = false -%}
+        {%- assign mega_menu_block = nil -%}
 
-            <div class="custom-header__mobile-accordion-content" data-accordion-content>
-              <!-- First Collection List -->
-              <div class="custom-header__mobile-subgroup">
-                <span class="custom-header__mobile-subtitle">Shop by Category</span>
-                <a href="/collections/all">All Products</a>
-                <a href="/collections/new-arrivals">New Arrivals</a>
-                <a href="/collections/best-sellers">Best Sellers</a>
-              </div>
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'mega_menu' and block.settings.menu_item != blank -%}
+            {%- assign trigger_name = block.settings.menu_item | downcase | strip -%}
+            {%- assign current_name = link.title | downcase | strip -%}
+            {%- if trigger_name == current_name -%}
+              {%- assign has_mega_menu = true -%}
+              {%- assign mega_menu_block = block -%}
+              {%- break -%}
+            {%- endif -%}
+          {%- endif -%}
+        {%- endfor -%}
 
-              <!-- Second Collection List -->
-              <div class="custom-header__mobile-subgroup">
-                <span class="custom-header__mobile-subtitle">Featured Collections</span>
-                <a href="/collections/featured">Featured Products</a>
-                <a href="/collections/sale">Sale</a>
-                <a href="/collections/popular">Popular Products</a>
-              </div>
-
-              <!-- Featured Image / Promo -->
-              <div class="custom-header__mobile-promo">
-                <a href="/collections/all" class="custom-header__mobile-promo-card">
-                  {% if section.settings.mega_menu_img != blank %}
-                    <img
-                      src="{{ section.settings.mega_menu_img | image_url: width: 500 }}"
-                      alt="Featured collection"
-                      width="500"
-                      height="320"
-                      loading="lazy"
-                    >
-                  {% else %}
-                    <img
-                      src="https://placehold.co/500x320?text=Featured+Collection"
-                      alt="Featured collection"
-                      width="500"
-                      height="320"
-                      loading="lazy"
-                    >
-                  {% endif %}
-                  <div class="custom-header__mobile-promo-info">
-                    <p>Discover Our Collection</p>
-                    <span class="custom-header__mobile-promo-cta">Explore Now &rarr;</span>
-                  </div>
-                </a>
-              </div>
-            </div>
-          </li>
+        {% if has_mega_menu and mega_menu_block != nil %}
+          {% render 'mega_menu', link: link, block: mega_menu_block, type: 'mobile' %}
         {% else %}
           <li class="custom-header__mobile-item">
             <a href="{{ link.url }}" class="custom-header__mobile-link">{{ link.title }}</a>
@@ -358,11 +280,6 @@
                 "label": "Select Menu"
                 },
                 {
-                    "type": "image_picker",
-                    "id": "mega_menu_img",
-                    "label": "Mega Menu Image"
-                },
-                {
                     "type": "range",
                     "id": "header-max-width",
                     "label": "Set Header Max Width",
@@ -372,7 +289,56 @@
                     "default": 1300
                 }
     ],
-    "blocks": [],
+    "blocks": [
+      {
+        "name": "Mega Menu",
+        "type": "mega_menu",
+        "settings": [
+          {
+            "type": "text",
+            "id": "menu_item",
+            "label": "Menu Item Title",
+            "info": "Enter the exact name of the menu item that should trigger this mega menu (e.g. Collection, Shop)."
+          },
+          {
+            "type": "header",
+            "content": "Add Mega Menu"
+          },
+          {
+            "type": "link_list",
+            "id": "mega_menu_1",
+            "label": "Select Menu 1"
+          },
+          {
+            "type": "link_list",
+            "id": "mega_menu_2",
+            "label": "Select Menu 2"
+          },
+          {
+            "type": "image_picker",
+            "id": "mega_menu_img",
+            "label": "Mega Menu Image"
+          },
+          {
+            "type": "text",
+            "label": "Add Title for Mega Menu Image",
+            "id": "mega_menu_image_title",
+            "default": "Image Title"
+          },
+          {
+            "type": "url",
+            "id": "mega_menu_link_url",
+            "label": "Mega Menu Link Url"
+          },
+           {
+            "type": "text",
+            "label": "Add Link Title",
+            "id": "mega_menu_link_title",
+            "default": "Image Link"
+          }
+        ]
+      }
+    ],
     "presets": [
         {
             "name": "Header"

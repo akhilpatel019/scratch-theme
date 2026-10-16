@@ -217,6 +217,7 @@
   justify-self: end;
   gap: 20px;
   min-width: 0;
+  flex-direction: row-reverse;
 }
 
 /* Keep the rendered cart snippet's own styles intact */
