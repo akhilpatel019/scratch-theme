@@ -1,0 +1,123 @@
+<style>
+  
+/* ============================
+   COLLECTION VIDEO POSTER
+============================ */
+
+.collection-video-poster {
+  position: relative;
+  width: 100%;
+  min-height: 420px;
+  overflow: hidden;
+  background: #202f3b;
+  color: #ffffff;
+}
+
+/* Background Video */
+
+.collection-video-poster__video {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* Dark Overlay */
+
+.collection-video-poster__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+    90deg,
+    rgba(32, 47, 59, 0.75) 0%,
+    rgba(32, 47, 59, 0.4) 55%,
+    rgba(32, 47, 59, 0.15) 100%
+  );
+  pointer-events: none;
+}
+
+/* Title Parent */
+
+.collection-video-poster__content {
+	position: relative;
+	z-index: 2;
+	display: flex;
+	align-items: center;
+	width: 100%;
+	min-height: 420px;
+	box-sizing: border-box;
+	max-width: 1200px;
+	margin: 0 auto;
+}
+
+.collection-video-poster__content h1 {
+  margin: 0;
+  color: #ffffff;
+  font-size: clamp(32px, 5vw, 60px);
+  font-weight: 700;
+  line-height: 1.15;
+  overflow-wrap: anywhere;
+  text-transform: uppercase;
+  text-align: center;
+  width: 100%;
+}
+
+/* Tablet */
+
+@media screen and (max-width: 990px) {
+  .collection-video-poster,
+  .collection-video-poster__content {
+    min-height: 350px;
+  }
+}
+
+/* Mobile */
+
+@media screen and (max-width: 767px) {
+  .collection-video-poster,
+  .collection-video-poster__content {
+    min-height: 280px;
+  }
+
+  .collection-video-poster__content {
+    padding: 25px 5%;
+  }
+
+  .collection-video-poster__content h1 {
+    font-size: clamp(28px, 7vw, 38px);
+  }
+}
+
+</style>
+
+
+<div class="collection-video-poster" {{ block.shopify_attributes }}>
+
+  {% if block.settings.poster_video != blank %}
+    {{
+      block.settings.poster_video
+      | video_tag:
+        autoplay: true,
+        loop: true,
+        muted: true,
+        controls: false,
+        image_size: '1600x',
+        class: 'collection-video-poster__video'
+    }}
+  {% endif %}
+
+  <div class="collection-video-poster__overlay"></div>
+
+  <div class="collection-video-poster__content">
+    <h1>
+      {{ block.settings.collection_poster_title | escape }}
+    </h1>
+  </div>
+
+</div>
+
+

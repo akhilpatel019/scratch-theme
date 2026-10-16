@@ -1,0 +1,90 @@
+
+{{ 'base.css' | asset_url | stylesheet_tag }}
+
+
+
+
+
+{% for block in section.blocks %}
+  {% if block.type == 'collection_poster' %}
+    {% render 'collection_poster', block: block %}
+  {% endif %}
+  {% if block.type == 'collection_tabs' %}
+    {% render 'collection-tabs', block: block %}
+  {% endif %}
+{% endfor %}
+
+
+
+{% schema %}
+{
+  "name": "Collection Page",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "collection_poster",
+      "name": "Collection Poster",
+      "settings": [
+        {
+          "type": "header",
+          "content": "Collection Poster Setting"
+        },
+        {
+          "type": "text",
+          "default": "Poster Title",
+          "id": "collection_poster_title",
+          "label": "Poster Title"
+        },
+        {
+          "type": "video",
+          "id": "poster_video",
+          "label": "Set Bg Video"
+        }
+      ]
+    },
+    
+  {
+  "type": "collection_tabs",
+  "name": "Collection Tabs",
+  "settings": [
+    {
+      "type": "text",
+      "id": "section_label",
+      "label": "Section Label",
+      "default": "OUR COLLECTIONS"
+    },
+    {
+      "type": "text",
+      "id": "section_title",
+      "label": "Section Title",
+      "default": "Explore Our Collections"
+    },
+    {
+      "type": "textarea",
+      "id": "section_desc",
+      "label": "Section Description",
+      "default": "Discover styles selected for you."
+    },
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "label": "Products Per Page",
+      "min": 4,
+      "max": 24,
+      "step": 4,
+      "default": 8
+    }
+  ]
+}
+    
+  ],
+
+  
+
+  "presets": [
+    {
+      "name": "Collection Page"
+    }
+  ]
+}
+{% endschema %}

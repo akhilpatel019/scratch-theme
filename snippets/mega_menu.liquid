@@ -5,12 +5,48 @@
   {% render 'mega_menu', link: link, block: mega_menu_block, type: 'mobile' %}
 {% endcomment %}
 
+{%- assign is_active = false -%}
+
+{%- comment -%} 1. Direct active or current check {%- endcomment -%}
+{%- if link.active or link.current or link.child_active -%}
+  {%- assign is_active = true -%}
+{%- elsif request.path == link.url -%}
+  {%- assign is_active = true -%}
+{%- elsif template.name == 'collection' and link.url contains '/collections' -%}
+  {%- assign is_active = true -%}
+{%- endif -%}
+
+{%- comment -%} 2. Check if current page matches any sublink in Menu 1 {%- endcomment -%}
+{%- if block.settings.mega_menu_1 != blank and is_active == false -%}
+  {%- for sublink in linklists[block.settings.mega_menu_1].links -%}
+    {%- if sublink.active or sublink.current or request.path == sublink.url -%}
+      {%- assign is_active = true -%}
+      {%- break -%}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endif -%}
+
+{%- comment -%} 3. Check if current page matches any sublink in Menu 2 {%- endcomment -%}
+{%- if block.settings.mega_menu_2 != blank and is_active == false -%}
+  {%- for sublink in linklists[block.settings.mega_menu_2].links -%}
+    {%- if sublink.active or sublink.current or request.path == sublink.url -%}
+      {%- assign is_active = true -%}
+      {%- break -%}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endif -%}
+
+{%- comment -%} 4. Check if current page matches promo image link {%- endcomment -%}
+{%- if block.settings.mega_menu_link_url != blank and is_active == false and request.path == block.settings.mega_menu_link_url -%}
+  {%- assign is_active = true -%}
+{%- endif -%}
+
 {% if type == 'mobile' %}
   <!-- Mobile Mega Menu Accordion Item -->
   <li class="custom-header__mobile-item custom-header__mobile-accordion" data-accordion {{ block.shopify_attributes }}>
     <button
       type="button"
-      class="custom-header__mobile-link custom-header__mobile-accordion-trigger"
+      class="custom-header__mobile-link custom-header__mobile-accordion-trigger{% if is_active %} active{% endif %}"
       data-accordion-trigger
       aria-expanded="false"
     >
@@ -25,7 +61,7 @@
         <div class="custom-header__mobile-subgroup">
           <span class="custom-header__mobile-subtitle">{{ menu_1.title }}</span>
           {% for sublink in menu_1.links %}
-            <a href="{{ sublink.url }}">{{ sublink.title }}</a>
+            <a href="{{ sublink.url }}" class="{% if sublink.active or sublink.current or request.path == sublink.url %}active{% endif %}">{{ sublink.title }}</a>
           {% endfor %}
         </div>
       {% endif %}
@@ -36,7 +72,7 @@
         <div class="custom-header__mobile-subgroup">
           <span class="custom-header__mobile-subtitle">{{ menu_2.title }}</span>
           {% for sublink in menu_2.links %}
-            <a href="{{ sublink.url }}">{{ sublink.title }}</a>
+            <a href="{{ sublink.url }}" class="{% if sublink.active or sublink.current or request.path == sublink.url %}active{% endif %}">{{ sublink.title }}</a>
           {% endfor %}
         </div>
       {% endif %}
@@ -44,7 +80,7 @@
       <!-- Featured Image / Promo -->
       {% if block.settings.mega_menu_img != blank %}
         <div class="custom-header__mobile-promo">
-          <a href="{{ block.settings.mega_menu_link_url }}" class="custom-header__mobile-promo-card">
+          <a href="{{ block.settings.mega_menu_link_url | default: link.url }}" class="custom-header__mobile-promo-card">
             <img
               src="{{ block.settings.mega_menu_img | image_url: width: 500 }}"
               alt="{{ block.settings.mega_menu_img.alt | default: link.title }}"
@@ -53,8 +89,8 @@
               loading="lazy"
             >
             <div class="custom-header__mobile-promo-info">
-              <p>{{block.settings.mega_menu_image_title}}</p>
-              <span class="custom-header__mobile-promo-cta">{{block.settings.mega_menu_link_title}} &rarr;</span>
+              <p>{{ block.settings.mega_menu_image_title }}</p>
+              <span class="custom-header__mobile-promo-cta">{{ block.settings.mega_menu_link_title }} &rarr;</span>
             </div>
           </a>
         </div>
@@ -65,7 +101,7 @@
 {% else %}
   <!-- Desktop Mega Menu Item -->
   <li class="custom-header__mega-item" {{ block.shopify_attributes }}>
-    <a href="{{ link.url }}" class="custom-header__mega-trigger {%- if link.active -%}active{%- endif -%}">
+    <a href="{{ link.url }}" class="custom-header__mega-trigger{% if is_active %} active{% endif %}">
       {{ link.title }}
       <span class="custom-header__chevron"></span>
     </a>
@@ -77,7 +113,7 @@
         <div class="custom-header__mega-column">
           <h3>{{ menu_1.title }}</h3>
           {% for sublink in menu_1.links %}
-            <a href="{{ sublink.url }}">{{ sublink.title }}</a>
+            <a href="{{ sublink.url }}" class="{% if sublink.active or sublink.current or request.path == sublink.url %}active{% endif %}">{{ sublink.title }}</a>
           {% endfor %}
         </div>
       {% endif %}
@@ -88,7 +124,7 @@
         <div class="custom-header__mega-column">
           <h3>{{ menu_2.title }}</h3>
           {% for sublink in menu_2.links %}
-            <a href="{{ sublink.url }}">{{ sublink.title }}</a>
+            <a href="{{ sublink.url }}" class="{% if sublink.active or sublink.current or request.path == sublink.url %}active{% endif %}">{{ sublink.title }}</a>
           {% endfor %}
         </div>
       {% endif %}
@@ -96,7 +132,7 @@
       <!-- Featured Image -->
       {% if block.settings.mega_menu_img != blank %}
         <div class="custom-header__mega-image">
-          <a href="{{ block.settings.mega_menu_link_url }}">
+          <a href="{{ block.settings.mega_menu_link_url | default: link.url }}">
             <img
               src="{{ block.settings.mega_menu_img | image_url: width: 500 }}"
               alt="{{ block.settings.mega_menu_img.alt | default: link.title }}"
@@ -106,9 +142,9 @@
             >
           </a>
 
-          <p>{{block.settings.mega_menu_image_title}}</p>
+          <p>{{ block.settings.mega_menu_image_title }}</p>
           <a class="custom-header__mega-cta" href="{{ block.settings.mega_menu_link_url | default: link.url }}">
-            {{block.settings.mega_menu_link_title}} &rarr;
+            {{ block.settings.mega_menu_link_title }} &rarr;
           </a>
         </div>
       {% endif %}

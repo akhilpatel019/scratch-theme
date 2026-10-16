@@ -1,0 +1,339 @@
+<style>
+    /* Collection Tabs */
+.collection-tabs-block {
+  background: #fff;
+  color: #222;
+}
+
+/* Header */
+.collection-tabs-block .collection-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 20px;
+  margin-bottom: 32px;
+}
+
+.collection-tabs-block .collection-subtitle {
+  color: #777;
+  font-size: 12px;
+  letter-spacing: 2px;
+  margin-bottom: 10px;
+}
+
+.collection-tabs-block .collection-header h2 {
+  font-size: clamp(28px, 4vw, 40px);
+  margin: 0 0 10px;
+}
+
+.collection-tabs-block .collection-description {
+  color: #777;
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* Tabs */
+.collection-tabs-block .collection-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  margin-bottom: 32px;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.collection-tabs-block .collection-tab {
+  display: inline-block;
+  margin-bottom: -1px;
+  padding: 12px 2px;
+  border-bottom: 2px solid transparent;
+  color: #777;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.collection-tabs-block .collection-tab:hover,
+.collection-tabs-block .collection-tab.active {
+  color: #222;
+  border-bottom-color: #222;
+}
+
+/* Product Grid */
+.collection-tabs-block .collection-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.collection-tabs-block .product-card {
+  position: relative;
+  min-width: 0;
+}
+
+.collection-tabs-block .product-card-image-link {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+
+.collection-tabs-block .product-image {
+  overflow: hidden;
+  background: #f5f5f5;
+  aspect-ratio: 1 / 1;
+}
+
+.collection-tabs-block .product-image img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.collection-tabs-block .product-card:hover .product-image img {
+  transform: scale(1.05);
+}
+
+/* Product Info */
+.collection-tabs-block .product-info {
+  padding-top: 16px;
+}
+
+.collection-tabs-block .product-vendor {
+  color: #888;
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  margin: 0 0 8px;
+}
+
+.collection-tabs-block .product-info h3 {
+  font-size: 16px;
+  font-weight: 500;
+  margin: 0 0 10px;
+}
+
+.collection-tabs-block .product-info h3 a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.collection-tabs-block .product-price {
+  margin-bottom: 16px;
+}
+
+.collection-tabs-block .current-price {
+  font-weight: 600;
+}
+
+/* Product Button */
+.collection-tabs-block .open-product-btn {
+  display: block;
+  padding: 12px;
+  border: 1px solid #222;
+  background: #222;
+  color: #fff;
+  text-align: center;
+  text-decoration: none;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.collection-tabs-block .open-product-btn:hover {
+  background: #fff;
+  color: #222;
+}
+
+/* Pagination */
+.collection-tabs-block .collection-pagination {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-top: 40px;
+}
+
+.collection-tabs-block .pagination-link {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 40px;
+  min-height: 40px;
+  padding: 8px 12px;
+  border: 1px solid #e5e5e5;
+  color: #222;
+  text-decoration: none;
+}
+
+.collection-tabs-block a.pagination-link:hover,
+.collection-tabs-block .pagination-link.current {
+  border-color: #222;
+  background: #222;
+  color: #fff;
+}
+
+/* Tablet */
+@media (max-width: 900px) {
+  .collection-tabs-block .collection-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 28px 16px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .collection-tabs-block .collection-header {
+    align-items: flex-start;
+  }
+
+  .collection-tabs-block .collection-description {
+    font-size: 14px;
+  }
+
+  .collection-tabs-block .collection-tabs {
+    gap: 18px;
+    margin-bottom: 24px;
+  }
+
+  .collection-tabs-block .collection-tab {
+    font-size: 13px;
+  }
+
+  .collection-tabs-block .collection-pagination {
+    gap: 6px;
+  }
+
+  .collection-tabs-block .pagination-link {
+    min-width: 36px;
+    min-height: 36px;
+    padding: 6px 9px;
+  }
+}
+</style>
+
+<section class="featured-collection page_width collection-tabs-block">
+  <div class="collection-header">
+    <div>
+      {% if block.settings.section_label != blank %}
+        <p class="collection-subtitle">
+          {{ block.settings.section_label | escape }}
+        </p>
+      {% endif %}
+
+      <h2>{{ block.settings.section_title | escape }}</h2>
+
+      {% if block.settings.section_desc != blank %}
+        <p class="collection-description">
+          {{ block.settings.section_desc | escape }}
+        </p>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="collection-tabs" aria-label="Collections">
+    {% for tab_collection in collections %}
+      {% unless tab_collection.handle == 'frontpage' %}
+        <a
+          href="{{ tab_collection.url }}"
+          class="collection-tab{% if tab_collection.handle == collection.handle %} active{% endif %}"
+          {% if tab_collection.handle == collection.handle %}
+            aria-current="page"
+          {% endif %}
+        >
+          {{ tab_collection.title | escape }}
+        </a>
+      {% endunless %}
+    {% endfor %}
+  </div>
+
+    {% paginate collection.products by block.settings.products_per_page %}
+    <div class="collection-grid">
+      {% for collection_product in collection.products %}
+        <div class="product-card">
+          <a
+            href="{{ collection_product.url }}"
+            class="product-card-image-link"
+          >
+            <div class="product-image">
+              {% if collection_product.featured_image %}
+                {{
+                  collection_product.featured_image
+                  | image_url: width: 600
+                  | image_tag:
+                    loading: 'lazy',
+                    widths: '300, 450, 600',
+                    alt: collection_product.featured_image.alt
+                }}
+              {% endif %}
+            </div>
+          </a>
+
+          <div class="product-info">
+            {% if collection_product.vendor != blank %}
+              <p class="product-vendor">
+                {{ collection_product.vendor | escape }}
+              </p>
+            {% endif %}
+
+            <h3>
+              <a href="{{ collection_product.url }}">
+                {{ collection_product.title | escape }}
+              </a>
+            </h3>
+
+            <div class="product-price">
+              <span class="current-price">
+                {{ collection_product.price | money }}
+              </span>
+            </div>
+
+            <a
+              href="{{ collection_product.url }}"
+              class="open-product-btn"
+            >
+              See Options
+            </a>
+          </div>
+        </div>
+      {% else %}
+        <p>No products found in this collection.</p>
+      {% endfor %}
+    </div>
+
+    {% if paginate.pages > 1 %}
+      <nav class="collection-pagination" aria-label="Pagination">
+        {% if paginate.previous %}
+          <a href="{{ paginate.previous.url }}" class="pagination-link">
+            Previous
+          </a>
+        {% endif %}
+
+        {% for part in paginate.parts %}
+          {% if part.is_link %}
+            <a href="{{ part.url }}" class="pagination-link">
+              {{ part.title }}
+            </a>
+          {% else %}
+            <span
+              class="pagination-link{% if part.title == paginate.current_page %} current{% endif %}"
+              {% if part.title == paginate.current_page %}
+                aria-current="page"
+              {% endif %}
+            >
+              {{ part.title }}
+            </span>
+          {% endif %}
+        {% endfor %}
+
+        {% if paginate.next %}
+          <a href="{{ paginate.next.url }}" class="pagination-link">
+            Next
+          </a>
+        {% endif %}
+      </nav>
+    {% endif %}
+  {% endpaginate %}
+
+
+  
+</section>

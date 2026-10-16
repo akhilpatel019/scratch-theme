@@ -30,7 +30,10 @@
   text-decoration: none;
 }
 
-.custom-header__menu li a.active {
+.custom-header__menu li a.active,
+.custom-header__mega-trigger.active,
+.custom-header__mobile-link.active,
+.custom-header__mega-column a.active {
   color: #e62e2d;
 }
 
