@@ -30,10 +30,54 @@
         "featured_collection": "all",
         "product_limit": 8
       }
+    },
+    "review_section_qi8Ped": {
+      "type": "review-section",
+      "blocks": {
+        "review_XkfiHx": {
+          "type": "review",
+          "settings": {
+            "rating": 4,
+            "review_text": "The quality is excellent, and everything looks even better than I expected. The product feels premium, and I'm really happy with my purchase.",
+            "customer_name": "John Doe",
+            "customer_label": "Verified Customer"
+          }
+        },
+        "review_hArTPq": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "review_text": "I had a great shopping experience, and my order arrived on time. The product looks beautiful, and the overall quality is impressive.",
+            "customer_name": "Jane Smith",
+            "customer_label": "Verified Customer"
+          }
+        },
+        "review_FUkxLz": {
+          "type": "review",
+          "settings": {
+            "rating": 4,
+            "review_text": "The product is good and matches the description on the website. The quality is decent, although there is a little room for improvement.",
+            "customer_name": "Alex Morgan",
+            "customer_label": "Verified Customer"
+          }
+        }
+      },
+      "block_order": [
+        "review_XkfiHx",
+        "review_hArTPq",
+        "review_FUkxLz"
+      ],
+      "name": "Review Section",
+      "settings": {
+        "r_text_label": "CUSTOMER REVIEWS",
+        "r_text_title": "What Our Customers Say",
+        "r_text_desc": "Real experiences from people who love our products."
+      }
     }
   },
   "order": [
     "video_hero_Geem8W",
-    "featured_collection_mbA9Mz"
+    "featured_collection_mbA9Mz",
+    "review_section_qi8Ped"
   ]
 }

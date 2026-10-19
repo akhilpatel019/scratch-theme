@@ -1,0 +1,141 @@
+{{ 'review-section.css' | asset_url | stylesheet_tag }}
+
+
+<section class="review-section" {{ section.shopify_attributes }}>
+  <div class="review-section__container page_width">
+
+    <!-- Section Heading -->
+    <div class="review-section__header">
+      <span class="review-section__eyebrow">{{ section.settings.r_text_label }}</span>
+      <h2>{{ section.settings.r_text_title }}</h2>
+      <p>{{ section.settings.r_text_desc }}</p>
+    </div>
+
+    <!-- Review Grid -->
+    <div class="review-section__grid">
+
+      {% for block in section.blocks %}
+        <article class="review-card" {{ block.shopify_attributes }}>
+
+          <div
+            class="review-card__stars"
+            role="img"
+            aria-label="{{ block.settings.rating }} out of 5 stars">
+            {% for i in (1..5) %}
+              <svg
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+                class="{% if i <= block.settings.rating %}star-filled{% else %}star-empty{% endif %}">
+                <path d="M12 2.5l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5L12 17.3l-5.8 3.1 1.1-6.5-4.7-4.6 6.5-.9L12 2.5z" />
+              </svg>
+            {% endfor %}
+          </div>
+
+          <p class="review-card__text">
+            {{ block.settings.review_text }}
+          </p>
+
+          <div class="review-card__customer">
+            <div class="review-card__avatar">
+              {% if block.settings.customer_image != blank %}
+                {{ block.settings.customer_image
+ | image_url: width: 100
+ | image_tag: alt: block.settings.customer_name
+                }}
+
+              {% else %}
+                <img
+                  src="https://cdn.shopify.com/s/files/1/1088/9052/1969/files/images.png?v=1792415296"
+                  alt="Customer profile"
+                  width="100"
+                  height="100">
+              {% endif %}
+            </div>
+
+            <div class="review-card__customer-info">
+              <h3>{{ block.settings.customer_name }}</h3>
+              <span>{{ block.settings.customer_label }}</span>
+            </div>
+          </div>
+
+        </article>
+      {% endfor %}
+
+    </div>
+  </div>
+</section>
+
+
+{% schema %}
+  {
+    "name": "Review Section",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Review Section Settings"
+      }, {
+        "type": "text",
+        "default": "CUSTOMER REVIEWS",
+        "id": "r_text_label",
+        "label": "Add Section Label"
+      }, {
+        "type": "text",
+        "default": "What Our Customers Say",
+        "id": "r_text_title",
+        "label": "Add Section Title"
+      }, {
+        "type": "text",
+        "default": "Real experiences from people who love our products.",
+        "id": "r_text_desc",
+        "label": "Add Section Description"
+      }
+    ],
+
+    "blocks": [
+      {
+        "type": "review",
+        "name": "Customer Review",
+        "settings": [
+          {
+            "type": "range",
+            "id": "rating",
+            "label": "Star Rating",
+            "min": 1,
+            "max": 5,
+            "step": 1,
+            "default": 5
+          },
+
+          {
+            "type": "textarea",
+            "id": "review_text",
+            "label": "Review Text",
+            "default": "Amazing quality and a great experience!"
+          },
+          {
+            "type": "image_picker",
+            "id": "customer_image",
+            "label": "Customer Image"
+          },
+          {
+            "type": "text",
+            "id": "customer_name",
+            "label": "Customer Name",
+            "default": "John Doe"
+          }, {
+            "type": "text",
+            "id": "customer_label",
+            "label": "Customer Label",
+            "default": "Verified Customer"
+          }
+        ]
+      }
+    ],
+
+    "presets": [
+      {
+        "name": "Review Section"
+      }
+    ]
+  }
+{% endschema %}
