@@ -76,7 +76,7 @@
       </div>
 
       <div class="simple-size-options">
-        <p>Size</p>
+        <p>Size <span class="simple-sold-out-badge" id="SimpleSoldOutBadge-{{ section.id }}" style="display: none;">Sold out</span></p>
 
         {% for size_value in product_var.options_by_name.Size.values %}
           <button
