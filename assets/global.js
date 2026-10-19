@@ -90,9 +90,14 @@
 
       } catch (error) {
         console.error('Cart error:', error);
-      } finally {
-        if (addButton) addButton.disabled = false;
-      }
+      } 
+finally {
+  if (addButton) {
+    addButton.disabled = false;
+    addButton.classList.remove('loading');
+  }
+}
+
     });
   });
 

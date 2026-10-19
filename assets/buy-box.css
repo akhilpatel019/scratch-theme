@@ -239,3 +239,37 @@
       height: 72px;
     }
   }
+
+
+
+
+  .simple-variant-picker {
+  margin: 20px 0;
+}
+
+.simple-color-options,
+.simple-size-options {
+  margin-bottom: 18px;
+}
+
+.simple-color-options p,
+.simple-size-options p {
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.simple-color-option,
+.simple-size-option {
+  padding: 10px 16px;
+  margin: 0 8px 8px 0;
+  border: 1px solid #ccc;
+  background: #fff;
+  color: #222;
+  cursor: pointer;
+}
+
+.simple-color-option.active,
+.simple-size-option.active {
+  border: 2px solid #222;
+  background: #f2f2f2;
+}

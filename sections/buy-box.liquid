@@ -1,15 +1,12 @@
-{% comment %}
-  Simple Buy Box
-  Hardcoded demo content with a Swiper thumbnail gallery.
-  Replace the variant ID before testing cart functionality.
+{% comment %} 
+    Simple Buy Box 
+    Hardcoded demo content with a Swiper thumbnail gallery. 
+    Replace the variant ID before testing cart functionality.
 {% endcomment %}
 
 {{ 'buy-box.css' | asset_url | stylesheet_tag }}
 {{ 'base.css' | asset_url | stylesheet_tag }}
-<link
-  rel="stylesheet"
-  href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
 
 <section id="simple-buy-box-{{ section.id }}" class="simple-buy-box page_width">
   <!-- LEFT: IMAGE GALLERY -->
@@ -24,9 +21,8 @@
               width="1000"
               height="1000"
               {% if forloop.first %}
-                fetchpriority="high"
-              {% endif %}
-            >
+              fetchpriority="high"
+              {% endif %}>
           </div>
         {% endfor %}
       </div>
@@ -43,8 +39,7 @@
                 alt="{{ product_thumbs.alt | default: product.title | escape }}"
                 width="220"
                 height="220"
-                loading="lazy"
-              >
+                loading="lazy">
             </div>
           {% endif %}
         {% endfor %}
@@ -62,34 +57,77 @@
       {{ product_var.description }}
     </div>
 
-    <div class="simple-product-price">{{ product_var.price | money }}</div>
+    <div class="simple-product-price" id="SimpleProductPrice-{{ section.id }}">
+      {{ product_var.selected_or_first_available_variant.price | money }}
+    </div>
 
-    <form action="{{ routes.cart_add_url }}" method="post" class="simple-product-form">
-      <!-- Replace with a real variant ID from your store -->
-      <input type="hidden" name="id" value="{{product_var.selected_or_first_available_variant.id}}">
+    <div class="simple-variant-picker">
+      <div class="simple-color-options">
+        <p>Color</p>
 
-    
-{% for block in section.blocks %}
-  {% case block.type %}
-    {% when 'quantity-selector' %}
-      {% render 'quantity-selector', block: block %}
-  {% endcase %}
-{% endfor %}
+        {% for color_value in product_var.options_by_name.Color.values %}
+          <button
+            type="button"
+            class="simple-color-option"
+            data-color="{{ color_value | escape }}">
+            {{ color_value }}
+          </button>
+        {% endfor %}
+      </div>
 
+      <div class="simple-size-options">
+        <p>Size</p>
+
+        {% for size_value in product_var.options_by_name.Size.values %}
+          <button
+            type="button"
+            class="simple-size-option"
+            data-size="{{ size_value | escape }}">
+            {{ size_value }}
+          </button>
+        {% endfor %}
+      </div>
+    </div>
+
+    <form
+      action="{{ routes.cart_add_url }}"
+      method="post"
+      class="simple-product-form">
+        <!-- Replace with a real variant ID from your store -->
+      <input
+        type="hidden"
+        name="id"
+        value="{{ product_var.selected_or_first_available_variant.id }}"
+        id="SimpleSelectedVariant-{{ section.id }}">
+
+      <script type="application/json" id="SimpleProductVariants-{{ section.id }}">
+        {{ product_var.variants | json }}
+      </script>
+
+      {% for block in section.blocks %}
+        {% case block.type %}
+          {% when 'quantity-selector' %}
+            {% render 'quantity-selector'
+              , block: block %}
+        {% endcase %}
+      {% endfor %}
 
       <div class="simple-buy-buttons">
-        <button type="submit" class="simple-add-button">Add to cart</button>
+        <button
+          type="submit"
+          class="simple-add-button"
+          id="SimpleAddButton-{{ section.id }}">
+          Add to cart
+        </button>
 
         <button
           type="submit"
           class="simple-buy-now-button"
-          formaction="{{ routes.cart_add_url }}?return_to=/checkout"
-        >
+          id="SimpleBuyNowButton-{{ section.id }}"
+          formaction="{{ routes.cart_add_url }}?return_to=/checkout">
           Buy it now
         </button>
       </div>
-
-      
     </form>
   </div>
 </section>
@@ -97,115 +135,107 @@
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js" defer></script>
 
 <script>
- (() => {
-  const sectionId = 'simple-buy-box-{{ section.id }}';
-
-  // Initialize the product image sliders
-  function initSimpleBuyBox() {
-    const section = document.getElementById(sectionId);
-
-    if (!section || section.dataset.swiperInitialized === 'true') return;
-
-    if (typeof Swiper === 'undefined') {
-      setTimeout(initSimpleBuyBox, 150);
-      return;
-    }
-
-    const mainElement = section.querySelector('.simple-main-slider');
-    const thumbElement = section.querySelector('.simple-thumb-slider');
-
-    if (!mainElement || !thumbElement) return;
-
-    section.dataset.swiperInitialized = 'true';
-
-    const thumbSwiper = new Swiper(thumbElement, {
-      slidesPerView: 'auto',
-      spaceBetween: 10,
-      watchSlidesProgress: true,
-      slideToClickedSlide: true,
-      observer: true,
-      observeParents: true
-    });
-
-    new Swiper(mainElement, {
-      slidesPerView: 1,
-      spaceBetween: 0,
-      observer: true,
-      observeParents: true,
-      thumbs: {
-        swiper: thumbSwiper
-      }
-    });
-  }
-
-  function initAddButtonLoader() {
-    const section = document.getElementById(sectionId);
-    if (!section) return;
-
-    const form = section.querySelector('.simple-product-form');
-    const addButton = section.querySelector('.simple-add-button');
-    if (!form || !addButton) return;
-
-    form.addEventListener('submit', function(event) {
-      if (event.submitter && event.submitter.classList.contains('simple-buy-now-button')) {
+  (() => {
+    const sectionId = 'simple-buy-box-{{ section.id }}';
+  
+    // Initialize the product image sliders
+    function initSimpleBuyBox() {
+      const section = document.getElementById(sectionId);
+  
+      if (!section || section.dataset.swiperInitialized === 'true') return;
+  
+      if (typeof Swiper === 'undefined') {
+        setTimeout(initSimpleBuyBox, 150);
         return;
       }
-      addButton.classList.add('loading');
-    });
-
-    const observer = new MutationObserver(function() {
-      if (addButton.disabled) {
-        addButton.classList.add('loading');
-      } else {
-        addButton.classList.remove('loading');
-      }
-    });
-
-    observer.observe(addButton, { attributes: true, attributeFilter: ['disabled'] });
-  }
-
-  function initSection() {
-    initSimpleBuyBox();
-    initAddButtonLoader();
-  }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initSection);
-  } else {
-    initSection();
-  }
-
-  document.addEventListener('shopify:section:load', function(event) {
-    if (event.detail && event.detail.sectionId === '{{ section.id }}') {
+  
+      const mainElement = section.querySelector('.simple-main-slider');
+      const thumbElement = section.querySelector('.simple-thumb-slider');
+  
+      if (!mainElement || !thumbElement) return;
+  
+      section.dataset.swiperInitialized = 'true';
+  
+      const thumbSwiper = new Swiper(thumbElement, {
+        slidesPerView: 'auto',
+        spaceBetween: 10,
+        watchSlidesProgress: true,
+        slideToClickedSlide: true,
+        observer: true,
+        observeParents: true,
+      });
+  
+      new Swiper(mainElement, {
+        slidesPerView: 1,
+        spaceBetween: 0,
+        observer: true,
+        observeParents: true,
+        thumbs: {
+          swiper: thumbSwiper,
+        },
+      });
+    }
+  
+    function initAddButtonLoader() {
       const section = document.getElementById(sectionId);
-
-      if (section) {
-        section.dataset.swiperInitialized = 'false';
-      }
-
+      if (!section) return;
+  
+      const form = section.querySelector('.simple-product-form');
+      const addButton = section.querySelector('.simple-add-button');
+      if (!form || !addButton) return;
+  
+      form.addEventListener('submit', function (event) {
+        if (event.submitter && event.submitter.classList.contains('simple-buy-now-button')) {
+          return;
+        }
+        addButton.classList.add('loading');
+      });
+  
+     
+    }
+  
+    function initSection() {
+      initSimpleBuyBox();
+      initAddButtonLoader();
+    }
+  
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initSection);
+    } else {
       initSection();
     }
-  });
-
-})();
-
+  
+    document.addEventListener('shopify:section:load', function (event) {
+      if (event.detail && event.detail.sectionId === '{{ section.id }}') {
+        const section = document.getElementById(sectionId);
+  
+        if (section) {
+          section.dataset.swiperInitialized = 'false';
+        }
+  
+        initSection();
+      }
+    });
+  })();
 </script>
 
+<script src="{{ 'simple-variant-picker.js' | asset_url }}" defer></script>
+
 {% schema %}
-{
-  "name": "Simple Buy Box",
-  "settings": [],
-  "blocks": [
-    {
-      "type": "quantity-selector",
-      "limit": 1,
-      "name": "Quantity Selector"
-    }
-  ],
-  "presets": [
-    {
-      "name": "Simple Buy Box"
-    }
-  ]
-}
+  {
+    "name": "Simple Buy Box",
+    "settings": [],
+    "blocks": [
+      {
+        "type": "quantity-selector",
+        "limit": 1,
+        "name": "Quantity Selector"
+      }
+    ],
+    "presets": [
+      {
+        "name": "Simple Buy Box"
+      }
+    ]
+  }
 {% endschema %}
