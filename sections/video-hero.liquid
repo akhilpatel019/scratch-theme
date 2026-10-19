@@ -1,0 +1,93 @@
+{{ 'video-hero.css' | asset_url | stylesheet_tag }}
+{{ 'base.css' | asset_url | stylesheet_tag }}
+
+
+
+<section class="video-hero">
+  <!-- Background Video -->
+ {% if section.settings.hero_video != blank %}
+  {{
+    section.settings.hero_video
+    | video_tag:
+      autoplay: true,
+      loop: true,
+      muted: true,
+      controls: false,
+      playsinline: true,
+      class: 'video-hero__video'
+  }}
+{% endif %}
+
+  <!-- Dark Overlay -->
+  <div class="video-hero__overlay"></div>
+
+  <!-- Hero Content -->
+  <div class="video-hero__content">
+    <h1>{{section.settings.hero_title_text}}</h1>
+
+    <p>
+      {{section.settings.hero_desc_text}}
+    </p>
+
+    <a href="{{section.settings.hero_btn_url}}" class="video-hero__button">
+      Shop Now
+    </a>
+    
+  </div>
+</section>
+
+
+{% schema %}
+{
+  "name": "Video Hero",
+  "settings": [
+    
+  {
+    "type": "header",
+    "content": "Bg Video Settings"
+
+  },  
+  {
+  "type": "video",
+  "id": "hero_video",
+  "label": "Hero Background Video"
+},
+{
+    "type": "header",
+    "content": "Hero Content Settings"
+},
+{
+    "type": "text",
+    "id": "hero_title_text",
+    "default": "Discover Your Style",
+    "label": "Add Hero Title"
+},
+
+{
+    "type": "text",
+    "id": "hero_desc_text",
+    "default": "Explore our latest collection, designed to bring comfort, confidence, and style to every moment",
+    "label": "Add Hero Description"
+},
+{
+    "type": "url",
+    "id": "hero_btn_url",
+    "label": "Add Button Url"
+},
+
+{
+    "type": "text",
+    "id": "hero_btn_text",
+    "default": "Shop Now",
+    "label": "Add Hero Button Text"
+}
+
+  
+],
+  "presets": [
+    {
+      "name": "Video Hero"
+    }
+  ]
+}
+{% endschema %}

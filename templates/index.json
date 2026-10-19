@@ -9,6 +9,17 @@
  */
 {
   "sections": {
+    "video_hero_Geem8W": {
+      "type": "video-hero",
+      "name": "Video Hero",
+      "settings": {
+        "hero_video": "shopify://files/videos/vidssave.com NIKE _ BUILT TO MOVE _ CINEMATIC AD 720P.mp4",
+        "hero_title_text": "Discover Your Style",
+        "hero_desc_text": "Explore our latest collection, designed to bring comfort, confidence, and style to every moment",
+        "hero_btn_url": "shopify://collections/all",
+        "hero_btn_text": "Shop Now"
+      }
+    },
     "featured_collection_mbA9Mz": {
       "type": "featured-collection",
       "name": "Featured Collection",
@@ -22,6 +33,7 @@
     }
   },
   "order": [
+    "video_hero_Geem8W",
     "featured_collection_mbA9Mz"
   ]
 }
