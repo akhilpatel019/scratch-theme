@@ -10,6 +10,7 @@
 {
   "current": {
     "store_logo": "shopify://shop_images/001-nike-logos-swoosh-black-Photoroom.png",
+    "store_footer_logo": "shopify://shop_images/002-nike-logos-swoosh-white-Photoroom.png",
     "page_width": 1200,
     "desktop_padding_top": 60,
     "desktop_padding_bottom": 60,
@@ -44,6 +45,19 @@
         "settings": {
           "header_menu": "main-menu",
           "header-max-width": 1200
+        }
+      },
+      "custom-footer": {
+        "type": "custom-footer",
+        "settings": {
+          "footer_news_title": "Subscribe to our newsletter",
+          "footer_news_text": "Get updates about our latest products and offers.",
+          "quick_links_menu": "sneakers",
+          "customer_support_menu": "leather",
+          "social_title": "Follow Us",
+          "instagram_url": "https://www.instagram.com/",
+          "facebook_url": "https://www.facebook.com/",
+          "youtube_url": "https://www.youtube.com/"
         }
       }
     },

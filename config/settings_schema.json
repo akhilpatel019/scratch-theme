@@ -15,6 +15,11 @@
             "label": "Add Logo Image",
             "id": "store_logo"
         },
+         {
+            "type": "image_picker",
+            "label": "Add Footer Logo",
+            "id": "store_footer_logo"
+        },
         {
             "type": "header",
             "content": "Set Page Width"

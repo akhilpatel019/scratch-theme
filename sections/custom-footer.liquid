@@ -1,0 +1,263 @@
+{{ 'footer.css' | asset_url | stylesheet_tag }}
+
+{{ 'base.css' | asset_url | stylesheet_tag }}
+
+
+
+
+{% comment %}
+  Custom Footer Section
+{% endcomment %}
+
+<footer class="custom-footer">
+  <div class="custom-footer__container">
+
+    <!-- Company Logo and Name -->
+    <div class="custom-footer__brand">
+      <a href="{{ routes.root_url }}" class="custom-footer__brand-link">
+        {% if settings.store_footer_logo != blank %}
+          {{
+            settings.store_footer_logo
+            | image_url: width: 300
+            | image_tag: class: 'custom-footer__logo', alt: shop.name
+          }}
+          {% else %}
+              <span class="custom-footer__brand-name">
+          {{ shop.name }}
+        </span>
+        {% endif %}
+
+      
+      </a>
+    </div>
+
+    <!-- Newsletter, Links and Social -->
+    <div class="custom-footer__main">
+
+      <!-- Newsletter -->
+      <div class="custom-footer__newsletter">
+        <h3>{{section.settings.footer_news_title}}</h3>
+        <p>{{section.settings.footer_news_text}}</p>
+
+        {% form 'customer', class: 'custom-footer__form' %}
+          <input type="hidden" name="contact[tags]" value="newsletter">
+
+          <input
+            type="email"
+            name="contact[email]"
+            placeholder="Enter your email"
+            aria-label="Email address"
+            autocomplete="email"
+            required
+          >
+
+          <button type="submit">Subscribe</button>
+
+          {% if form.posted_successfully? %}
+            <p class="custom-footer__message">
+              Thank you for subscribing!
+            </p>
+          {% endif %}
+
+          {% if form.errors %}
+            <div class="custom-footer__message">
+              {{ form.errors | default_errors }}
+            </div>
+          {% endif %}
+        {% endform %}
+      </div>
+
+      <!-- Two Footer Link Groups -->
+    
+<!-- Dynamic Footer Menus -->
+<div class="custom-footer__links">
+
+  <!-- Footer Menu 1 -->
+  {% assign quick_menu = section.settings.quick_links_menu %}
+
+  {% if quick_menu != blank %}
+    <div class="custom-footer__link-group">
+      <h3>{{ quick_menu.title }}</h3>
+
+      {% for link in quick_menu.links limit: 4 %}
+        <a href="{{ link.url }}">
+          {{ link.title }}
+        </a>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <!-- Footer Menu 2 -->
+  {% assign support_menu = section.settings.customer_support_menu %}
+
+  {% if support_menu != blank %}
+    <div class="custom-footer__link-group">
+      <h3>{{ support_menu.title }}</h3>
+
+      {% for link in support_menu.links limit: 4 %}
+        <a href="{{ link.url }}">
+          {{ link.title }}
+        </a>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+</div>
+
+
+
+      <!-- Social Media -->
+    
+<!-- Dynamic Social Media -->
+{% if section.settings.instagram_url != blank
+  or section.settings.facebook_url != blank
+  or section.settings.youtube_url != blank %}
+
+  <div class="custom-footer__social">
+    <h3>{{ section.settings.social_title }}</h3>
+
+    <div class="custom-footer__social-icons">
+
+      {% if section.settings.instagram_url != blank %}
+        <a
+          href="{{ section.settings.instagram_url }}"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Instagram"
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <rect x="3" y="3" width="18" height="18" rx="5"
+              fill="none" stroke="currentColor" stroke-width="2"/>
+            <circle cx="12" cy="12" r="4"
+              fill="none" stroke="currentColor" stroke-width="2"/>
+            <circle cx="17.5" cy="6.5" r="1.2"
+              fill="currentColor"/>
+          </svg>
+        </a>
+      {% endif %}
+
+      {% if section.settings.facebook_url != blank %}
+        <a
+          href="{{ section.settings.facebook_url }}"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Facebook"
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path fill="currentColor"
+              d="M13.5 21v-8h2.7l.4-3h-3.1V8.1c0-.9.3-1.5 1.6-1.5h1.7V3.9c-.3 0-1.3-.1-2.5-.1-2.5 0-4.2 1.5-4.2 4.3V10H7.3v3h2.8v8z"/>
+          </svg>
+        </a>
+      {% endif %}
+
+      {% if section.settings.youtube_url != blank %}
+        <a
+          href="{{ section.settings.youtube_url }}"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="YouTube"
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path fill="currentColor"
+              d="M23 7.1a3 3 0 0 0-2.1-2.2C19 4.4 12 4.4 12 4.4s-7 0-8.9.5A3 3 0 0 0 1 7.1 31 31 0 0 0 .5 12a31 31 0 0 0 .5 4.9 3 3 0 0 0 2.1 2.2c1.9.5 8.9.5 8.9.5s7 0 8.9-.5a3 3 0 0 0 2.1-2.2 31 31 0 0 0 .5-4.9 31 31 0 0 0-.5-4.9ZM9.5 15.6V8.4l6.2 3.6z"/>
+          </svg>
+        </a>
+      {% endif %}
+
+    </div>
+  </div>
+
+{% endif %}
+
+    </div>
+
+    <!-- Payments and Copyright -->
+    <div class="custom-footer__bottom">
+
+      <div class="custom-footer__payments">
+        {% for type in shop.enabled_payment_types %}
+          {{ type | payment_type_svg_tag }}
+        {% endfor %}
+      </div>
+
+      <p class="custom-footer__copyright">
+        &copy; {{ 'now' | date: '%Y' }} {{ shop.name }}. All rights reserved.
+      </p>
+
+    </div>
+
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Custom Footer",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Newsletter Settings"
+    },
+    {
+      "type": "text",
+      "default": "Subscribe to our newsletter",
+      "id": "footer_news_title",
+      "label": "Enter Newsletter Title"
+    },
+     {
+      "type": "text",
+      "default": "Get updates about our latest products and offers.",
+      "id": "footer_news_text",
+      "label": "Enter Newsletter Description"
+    },
+
+     {
+      "type": "header",
+      "content": "Footer Menu's Settings"
+    },
+
+     {
+      "type": "link_list",
+      "id": "quick_links_menu",
+      "label": "Select Footer Menu 1"
+    },
+    {
+      "type": "link_list",
+      "id": "customer_support_menu",
+      "label": "Select Footer Menu 2"
+    },
+  {
+  "type": "header",
+  "content": "Social Media Settings"
+},
+{
+  "type": "text",
+  "id": "social_title",
+  "label": "Social Media Heading",
+  "default": "Follow Us"
+},
+{
+  "type": "url",
+  "id": "instagram_url",
+  "label": "Instagram URL"
+},
+{
+  "type": "url",
+  "id": "facebook_url",
+  "label": "Facebook URL"
+},
+{
+  "type": "url",
+  "id": "youtube_url",
+  "label": "YouTube URL"
+}
+
+
+  ],
+  "presets": [
+    {
+      "name": "Custom Footer"
+    }
+  ]
+}
+{% endschema %}
+
