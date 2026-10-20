@@ -1,0 +1,33 @@
+{{ 'main-contact.css' | asset_url | stylesheet_tag }}
+
+<section class="contact-map">
+  <div class="contact-map__container">
+    {% if section.settings.map_embed_url != blank %}
+      <iframe
+        src="{{ section.settings.map_embed_url | escape }}"
+        title="Our location on Google Maps"
+        loading="lazy"
+        allowfullscreen>
+      </iframe>
+    {% endif %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Contact Map",
+ "settings": [
+  {
+    "type": "url",
+    "id": "map_embed_url",
+    "label": "Google Maps Embed URL",
+    "info": "In Google Maps, select Share → Embed a map → Copy HTML. Paste only the URL starting with https://www.google.com/maps/embed here."
+  }
+],
+  "presets": [
+    {
+      "name": "Contact Map"
+    }
+  ]
+}
+{% endschema %}

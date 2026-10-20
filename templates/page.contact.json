@@ -1,0 +1,27 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "map": {
+      "type": "contact-map",
+      "settings": {
+        "map_embed_url": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2796.1261742562633!2d-122.82985012339164!3d45.50753863054552!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x54950ec24d4da46d%3A0xa6e823d05767d2d0!2sNike%20World%20Headquarters!5e0!3m2!1sen!2sin!4v1792480072439!5m2!1sen!2sin"
+      }
+    },
+    "contact": {
+      "type": "main-contact",
+      "settings": {}
+    }
+  },
+  "order": [
+    "map",
+    "contact"
+  ]
+}
