@@ -1,13 +1,16 @@
 {{ 'faq_section.css' | asset_url | stylesheet_tag }}
 
+{%- capture anim -%}{% render 'animate-section' %}{%- endcapture -%}
+{%- capture anim_stagger -%}{% render 'animate-section', stagger: true %}{%- endcapture -%}
+
 <section class="faq-section">
   <div class="faq-section__container faq_max_width page_width">
 
-    <h2 class="faq-section__heading">
+    <h2 class="faq-section__heading {{ anim }}">
       {{ section.settings.heading }}
     </h2>
 
-    <div class="faq-section__list">
+    <div class="faq-section__list {{ anim_stagger }}">
       {% for block in section.blocks %}
         <div
           class="faq-section__item{% if forloop.first %} faq-section__item--open{% endif %}"

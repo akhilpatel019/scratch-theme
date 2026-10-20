@@ -1,5 +1,6 @@
- <section class="main-page page-width">
-  <div class="main-page__container">
+{%- capture anim -%}{% render 'animate-section' %}{%- endcapture -%}
+<section class="main-page page-width">
+  <div class="main-page__container {{ anim }}">
     {{ page.content }}
   </div>
 </section>

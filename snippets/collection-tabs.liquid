@@ -220,12 +220,15 @@
 }
 </style>
 
+{%- capture anim -%}{% render 'animate-section' %}{%- endcapture -%}
+{%- capture anim_stagger -%}{% render 'animate-section', stagger: true %}{%- endcapture -%}
+
 <section
   class="featured-collection page_width collection-tabs-block"
   id="CollectionTabs-{{ block.id | default: 'main' }}"
   data-block-id="{{ block.id | default: 'main' }}"
 >
-  <div class="collection-header">
+  <div class="collection-header {{ anim }}">
     <div>
       {% if block.settings.section_label != blank %}
         <p class="collection-subtitle">
@@ -243,7 +246,7 @@
     </div>
   </div>
 
-  <div class="collection-tabs" aria-label="Collections">
+  <div class="collection-tabs {{ anim }}" aria-label="Collections">
     {% for tab_collection in collections %}
       {% unless tab_collection.handle == 'frontpage' %}
         <a
@@ -261,7 +264,7 @@
 
   <div class="collection-grid-container" id="CollectionGridContainer-{{ block.id | default: 'main' }}">
     {% paginate collection.products by block.settings.products_per_page %}
-      <div class="collection-grid">
+      <div class="collection-grid {{ anim_stagger }}">
         {% for collection_product in collection.products %}
           <div class="product-card">
             <a

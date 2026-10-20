@@ -1,0 +1,24 @@
+{% comment %}
+  Snippet: animate-section.liquid
+  Usage: {% render 'animate-section', animate_class: animate_class %}
+
+  How to use in any section:
+  ─────────────────────────────────────────────────────
+  Step 1 — Capture the animate class at the top of your section:
+    {% capture animate_class %}{% render 'animate-section' %}{% endcapture %}
+
+  Step 2 — Apply it to your section wrapper or any element:
+    <section class="my-section {{ animate_class }}">
+
+  Step 3 — For staggered children (cards, list items, etc.) add animate--stagger:
+    <div class="my-grid {{ animate_class }} animate--stagger">
+
+  That's it — the global ON/OFF toggle and style picker in
+  Theme Settings → Animations will control everything automatically.
+  ─────────────────────────────────────────────────────
+{% endcomment %}
+
+{% if settings.enable_animations %}
+  {% assign anim_style = settings.animation_style | default: 'fade-up' %}
+  animate animate--{{ anim_style }}{% if stagger %} animate--stagger{% endif %}
+{% endif %}

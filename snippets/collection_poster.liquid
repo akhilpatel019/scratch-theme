@@ -112,7 +112,8 @@
 
   <div class="collection-video-poster__overlay"></div>
 
-  <div class="collection-video-poster__content">
+  {%- capture anim -%}{% render 'animate-section' %}{%- endcapture -%}
+  <div class="collection-video-poster__content {{ anim }}">
     <h1>
       {{ block.settings.collection_poster_title | escape }}
     </h1>

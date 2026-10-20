@@ -8,7 +8,9 @@
 {{ 'base.css' | asset_url | stylesheet_tag }}
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
 
-<section id="simple-buy-box-{{ section.id }}" class="simple-buy-box page_width">
+{%- capture anim_stagger -%}{% render 'animate-section', stagger: true %}{%- endcapture -%}
+
+<section id="simple-buy-box-{{ section.id }}" class="simple-buy-box page_width {{ anim_stagger }}">
   <!-- LEFT: IMAGE GALLERY -->
   <div class="simple-gallery">
     <div class="swiper simple-main-slider">

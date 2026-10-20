@@ -30,6 +30,9 @@
         --padding-right: {{ settings.desktop_padding_right }}px;
         --heading-font: {{settings.heading_font.family}};
          --body-font: {{settings.body_font.family}};
+
+        {%- comment -%} Animation speed: slider value 3–9 mapped to 0.3s–0.9s {%- endcomment -%}
+        --animation-speed: {{ settings.animation_speed | times: 0.1 }}s;
     }
 
      @media screen and (max-width: 749px) {
@@ -50,7 +53,7 @@
 
 
 
-<body>
+<body class="{% if settings.enable_animations %}anim-on{% endif %}">
 
 
 

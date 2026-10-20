@@ -1,7 +1,7 @@
 {{ 'video-hero.css' | asset_url | stylesheet_tag }}
 {{ 'base.css' | asset_url | stylesheet_tag }}
 
-
+{%- capture anim_stagger -%}{% render 'animate-section', stagger: true %}{%- endcapture -%}
 
 <section class="video-hero">
   <!-- Background Video -->
@@ -22,7 +22,7 @@
   <div class="video-hero__overlay"></div>
 
   <!-- Hero Content -->
-  <div class="video-hero__content">
+  <div class="video-hero__content {{ anim_stagger }}">
     <h1>{{section.settings.hero_title_text}}</h1>
 
     <p>

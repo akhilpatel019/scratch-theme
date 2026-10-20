@@ -1,8 +1,10 @@
 {{ 'main-contact.css' | asset_url | stylesheet_tag }}
 {{ 'base.css' | asset_url | stylesheet_tag }}
 
+{%- capture anim_stagger -%}{% render 'animate-section', stagger: true %}{%- endcapture -%}
+
 <section class="main-contact">
-  <div class="main-contact__container page_width">
+  <div class="main-contact__container page_width {{ anim_stagger }}">
 
     <div class="main-contact__info">
       <h2>{{ section.settings.heading | escape }}</h2>

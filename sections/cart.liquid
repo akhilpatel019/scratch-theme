@@ -1,10 +1,12 @@
 {{ 'cart.css' | asset_url | stylesheet_tag }}
-
 {{ 'base.css' | asset_url | stylesheet_tag }}
+
+{%- capture anim -%}{% render 'animate-section' %}{%- endcapture -%}
+{%- capture anim_stagger -%}{% render 'animate-section', stagger: true %}{%- endcapture -%}
 
 <div class="custom-cart page_width">
   <div class="custom-cart__container">
-    <h1 class="custom-cart__heading">Your Cart</h1>
+    <h1 class="custom-cart__heading {{ anim }}">Your Cart</h1>
 
     {% if cart.item_count > 0 %}
 
@@ -12,7 +14,7 @@
         <div class="custom-cart__layout">
 
           <!-- Cart Items -->
-          <div class="custom-cart__items">
+          <div class="custom-cart__items {{ anim_stagger }}">
 
             {% for item in cart.items %}
               <div class="custom-cart__item">
@@ -112,7 +114,7 @@
           </div>
 
           <!-- Order Summary -->
-          <div class="custom-cart__summary">
+          <div class="custom-cart__summary {{ anim }}">
             <h2>Order Summary</h2>
 
             <div class="custom-cart__summary-row">

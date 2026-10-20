@@ -1,4 +1,5 @@
-<h3>{{section.settings.text}}</h3>
+{%- capture anim -%}{% render 'animate-section' %}{%- endcapture -%}
+<h3 class="{{ anim }}">{{section.settings.text}}</h3>
 
 
 {% schema  %} 

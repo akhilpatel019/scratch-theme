@@ -9,11 +9,14 @@
   Custom Footer Section
 {% endcomment %}
 
+{%- capture anim -%}{% render 'animate-section' %}{%- endcapture -%}
+{%- capture anim_stagger -%}{% render 'animate-section', stagger: true %}{%- endcapture -%}
+
 <footer class="custom-footer">
   <div class="custom-footer__container">
 
     <!-- Company Logo and Name -->
-    <div class="custom-footer__brand">
+    <div class="custom-footer__brand {{ anim }}">
       <a href="{{ routes.root_url }}" class="custom-footer__brand-link">
         {% if settings.store_footer_logo != blank %}
           {{
@@ -32,7 +35,7 @@
     </div>
 
     <!-- Newsletter, Links and Social -->
-    <div class="custom-footer__main">
+    <div class="custom-footer__main {{ anim_stagger }}">
 
       <!-- Newsletter -->
       <div class="custom-footer__newsletter">

@@ -1,3 +1,59 @@
+/* =========================================
+   Scroll Reveal — Global Animation System
+   Respects settings.enable_animations (via body.anim-on).
+   If disabled, it leaves elements untouched.
+   ========================================= */
+(function () {
+  function initScrollReveal() {
+    if (!document.body.classList.contains('anim-on')) {
+      return;
+    }
+
+    var animElements = document.querySelectorAll('.animate:not(.animate--visible)');
+    if (!animElements.length) return;
+
+    if (!('IntersectionObserver' in window)) {
+      animElements.forEach(function (el) {
+        el.classList.add('animate--visible');
+      });
+      return;
+    }
+
+    var observer = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('animate--visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      {
+        threshold: 0.1,
+        rootMargin: '0px 0px -40px 0px'
+      }
+    );
+
+    animElements.forEach(function (el) {
+      observer.observe(el);
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initScrollReveal);
+  } else {
+    initScrollReveal();
+  }
+
+  document.addEventListener('shopify:section:load', initScrollReveal);
+  document.addEventListener('shopify:section:select', initScrollReveal);
+  var mutationObserver = new MutationObserver(function () {
+    initScrollReveal();
+  });
+  mutationObserver.observe(document.body, { childList: true, subtree: true });
+})();
+
+
  // Ajax Add to Cart
   document.querySelectorAll('.simple-product-form').forEach(function(form) {
     if (form.dataset.ajaxInitialized === 'true') return;

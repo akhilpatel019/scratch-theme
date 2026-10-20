@@ -136,6 +136,43 @@
       "default": "assistant_n4"
     }
     ]
+},
+{
+  "name": "Animations",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Scroll Reveal Animations"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_animations",
+      "label": "Enable scroll reveal animations",
+      "default": true,
+      "info": "Sections fade in as you scroll down the page"
+    },
+    {
+      "type": "select",
+      "id": "animation_style",
+      "label": "Animation style",
+      "options": [
+        { "value": "fade-up",   "label": "Fade up (default)" },
+        { "value": "fade-in",  "label": "Fade in only" },
+        { "value": "fade-left","label": "Fade from left" }
+      ],
+      "default": "fade-up"
+    },
+    {
+      "type": "range",
+      "id": "animation_speed",
+      "label": "Animation speed",
+      "min": 3,
+      "max": 9,
+      "step": 1,
+      "default": 5,
+      "info": "3 = fast  ·  9 = slow"
+    }
+  ]
 }
 
-]
+]

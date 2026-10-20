@@ -1,18 +1,20 @@
 {{ 'review-section.css' | asset_url | stylesheet_tag }}
 
+{%- capture anim -%}{% render 'animate-section' %}{%- endcapture -%}
+{%- capture anim_stagger -%}{% render 'animate-section', stagger: true %}{%- endcapture -%}
 
 <section class="review-section" {{ section.shopify_attributes }}>
   <div class="review-section__container page_width">
 
     <!-- Section Heading -->
-    <div class="review-section__header">
+    <div class="review-section__header {{ anim }}">
       <span class="review-section__eyebrow">{{ section.settings.r_text_label }}</span>
       <h2>{{ section.settings.r_text_title }}</h2>
       <p>{{ section.settings.r_text_desc }}</p>
     </div>
 
     <!-- Review Grid -->
-    <div class="review-section__grid">
+    <div class="review-section__grid {{ anim_stagger }}">
 
       {% for block in section.blocks %}
         <article class="review-card" {{ block.shopify_attributes }}>

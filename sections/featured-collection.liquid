@@ -1,5 +1,8 @@
+{%- capture anim -%}{% render 'animate-section' %}{%- endcapture -%}
+{%- capture anim_stagger -%}{% render 'animate-section', stagger: true %}{%- endcapture -%}
+
 <section class="featured-collection page_width">
-  <div class="collection-header">
+  <div class="collection-header {{ anim }}">
     <div>
       <p class="collection-subtitle">{{section.settings.section_label}}</p>
       <h2>{{section.settings.section_title}}</h2>
@@ -10,7 +13,7 @@
     <a href="/collections/all" class="view-all">View all →</a>
   </div>
 
-  <div class="collection-grid">
+  <div class="collection-grid {{ anim_stagger }}">
 
 
 
