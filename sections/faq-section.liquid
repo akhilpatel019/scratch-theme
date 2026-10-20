@@ -1,0 +1,138 @@
+{{ 'faq_section.css' | asset_url | stylesheet_tag }}
+
+<section class="faq-section">
+  <div class="faq-section__container faq_max_width page_width">
+
+    <h2 class="faq-section__heading">
+      {{ section.settings.heading }}
+    </h2>
+
+    <div class="faq-section__list">
+      {% for block in section.blocks %}
+        <div
+          class="faq-section__item{% if forloop.first %} faq-section__item--open{% endif %}"
+          {{ block.shopify_attributes }}
+        >
+          <button
+            class="faq-section__question"
+            aria-expanded="{% if forloop.first %}true{% else %}false{% endif %}"
+            aria-controls="faq-answer-{{ block.id }}"
+          >
+            <span>{{ block.settings.question }}</span>
+            <svg
+              class="faq-section__icon"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <line class="faq-icon__horizontal" x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+          </button>
+
+          <div
+            class="faq-section__answer"
+            id="faq-answer-{{ block.id }}"
+            role="region"
+          >
+            <div class="faq-section__answer-inner">
+              {{ block.settings.answer | newline_to_br }}
+            </div>
+          </div>
+
+        </div>
+      {% endfor %}
+    </div>
+
+  </div>
+</section>
+
+<script>
+  (function () {
+    var items = document.querySelectorAll('.faq-section__item');
+
+    items.forEach(function (item) {
+      var btn = item.querySelector('.faq-section__question');
+      var answer = item.querySelector('.faq-section__answer');
+
+      /* Set initial height for open item */
+      if (item.classList.contains('faq-section__item--open')) {
+        answer.style.maxHeight = answer.scrollHeight + 'px';
+      }
+
+      btn.addEventListener('click', function () {
+        var isOpen = item.classList.contains('faq-section__item--open');
+
+        /* Close all */
+        items.forEach(function (el) {
+          el.classList.remove('faq-section__item--open');
+          el.querySelector('.faq-section__question').setAttribute('aria-expanded', 'false');
+          el.querySelector('.faq-section__answer').style.maxHeight = '0';
+        });
+
+        /* If it was closed, open it */
+        if (!isOpen) {
+          item.classList.add('faq-section__item--open');
+          btn.setAttribute('aria-expanded', 'true');
+          answer.style.maxHeight = answer.scrollHeight + 'px';
+        }
+      });
+    });
+  })();
+</script>
+
+
+{% schema %}
+{
+  "name": "FAQ Section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Section heading",
+      "default": "Frequently Asked Questions"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "faq",
+      "name": "FAQ Item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Question",
+          "default": "What is your question?"
+        },
+        {
+          "type": "textarea",
+          "id": "answer",
+          "label": "Answer",
+          "default": "Write your answer here."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "FAQ Section",
+      "blocks": [
+        {
+          "type": "faq"
+        },
+        {
+          "type": "faq"
+        },
+        {
+          "type": "faq"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

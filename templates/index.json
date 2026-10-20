@@ -73,11 +73,63 @@
         "r_text_title": "What Our Customers Say",
         "r_text_desc": "Real experiences from people who love our products."
       }
+    },
+    "faq_section_YDtwzQ": {
+      "type": "faq-section",
+      "blocks": {
+        "faq_nybcrF": {
+          "type": "faq",
+          "settings": {
+            "question": "What payment methods do you accept?",
+            "answer": "We accept major credit and debit cards, along with other payment methods available at checkout."
+          }
+        },
+        "faq_WYjrGN": {
+          "type": "faq",
+          "settings": {
+            "question": "How can I track my order?",
+            "answer": "Once your order has been shipped, you will receive a confirmation email with tracking details to help you follow your delivery."
+          }
+        },
+        "faq_9z7FiY": {
+          "type": "faq",
+          "settings": {
+            "question": "What is your return policy?",
+            "answer": "If you're not satisfied with your purchase, you can request a return according to our return policy. Please check the product's return eligibility and applicable conditions before requesting a return."
+          }
+        },
+        "faq_G4aNUq": {
+          "type": "faq",
+          "settings": {
+            "question": "How long does shipping take?",
+            "answer": "Delivery times depend on your location and the shipping method selected. Estimated delivery details will be provided during checkout or in your order confirmation."
+          }
+        },
+        "faq_zWNte6": {
+          "type": "faq",
+          "settings": {
+            "question": "How can I contact customer support?",
+            "answer": "You can contact our customer support team through the contact page or by using the support email provided on our website. We’ll be happy to help with your questions."
+          }
+        }
+      },
+      "block_order": [
+        "faq_nybcrF",
+        "faq_WYjrGN",
+        "faq_9z7FiY",
+        "faq_G4aNUq",
+        "faq_zWNte6"
+      ],
+      "name": "FAQ Section",
+      "settings": {
+        "heading": "Frequently Asked Questions"
+      }
     }
   },
   "order": [
     "video_hero_Geem8W",
     "featured_collection_mbA9Mz",
-    "review_section_qi8Ped"
+    "review_section_qi8Ped",
+    "faq_section_YDtwzQ"
   ]
 }
