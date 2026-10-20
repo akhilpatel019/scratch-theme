@@ -1,15 +1,154 @@
 {{ 'main-contact.css' | asset_url | stylesheet_tag }}
+{{ 'base.css' | asset_url | stylesheet_tag }}
+
+<section class="main-contact">
+  <div class="main-contact__container page_width">
+
+    <div class="main-contact__info">
+      <h2>{{ section.settings.heading | escape }}</h2>
+      <p>{{ section.settings.description | escape }}</p>
+
+      {% if section.settings.email != blank %}
+        <div class="main-contact__detail">
+          <strong>Email</strong>
+          <p>
+            <a href="mailto:{{ section.settings.email | escape }}">
+              {{ section.settings.email | escape }}
+            </a>
+          </p>
+        </div>
+      {% endif %}
+
+      {% if section.settings.phone != blank %}
+        <div class="main-contact__detail">
+          <strong>Phone</strong>
+          <p>
+            <a href="tel:{{ section.settings.phone | escape }}">
+              {{ section.settings.phone | escape }}
+            </a>
+          </p>
+        </div>
+      {% endif %}
+
+      {% if section.settings.address != blank %}
+        <div class="main-contact__detail">
+          <strong>Address</strong>
+          <p>{{ section.settings.address | escape | newline_to_br }}</p>
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="main-contact__form">
+    
+      {% form 'contact'
+        , id: 'MainContactForm' %}
 
 
+        {% if form.posted_successfully? %}
+          <p class="main-contact__success" tabindex="-1">
+            Thank you for contacting us! We'll get back to you soon.
+          </p>
+        {% endif %}
+
+        {% if form.errors %}
+          <div class="main-contact__errors" role="alert">
+            <p>Please correct the following errors:</p>
+            {{ form.errors | default_errors }}
+          </div>
+        {% endif %}
+
+        <div class="main-contact__field">
+          <label for="ContactName">Name</label>
+          <input
+            type="text"
+            id="ContactName"
+            name="contact[name]"
+            autocomplete="name"
+            placeholder="Your name"
+            required>
+        </div>
+
+        <div class="main-contact__field">
+          <label for="ContactEmail">Email</label>
+          <input
+            type="email"
+            id="ContactEmail"
+            name="contact[email]"
+            autocomplete="email"
+            placeholder="Your email address"
+            required>
+        </div>
+
+        <div class="main-contact__field">
+          <label for="ContactPhone">Phone</label>
+          <input
+            type="tel"
+            id="ContactPhone"
+            name="contact[phone]"
+            autocomplete="tel"
+            placeholder="Your phone number">
+        </div>
+
+        <div class="main-contact__field">
+          <label for="ContactMessage">Message</label>
+          <textarea
+            id="ContactMessage"
+            name="contact[body]"
+            rows="5"
+            placeholder="How can we help?"
+            required></textarea>
+        </div>
+
+        <button type="submit" class="main-contact__submit">
+          Send Message
+        </button>
+      {% endform %}
+    </div>
+
+  </div>
+</section>
 
 {% schema %}
-{
-  "name": "Main Contact",
-  "settings": [],
-  "presets": [
-    {
-      "name": "Main Contact"
-    }
-  ]
-}
+  {
+    "name": "Main Contact",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Contact Information"
+      },
+      {
+        "type": "text",
+        "id": "heading",
+        "label": "Heading",
+        "default": "Get in Touch"
+      },
+      {
+        "type": "textarea",
+        "id": "description",
+        "label": "Description",
+        "default": "We'd love to hear from you."
+      },
+      {
+        "type": "text",
+        "id": "email",
+        "label": "Email address",
+        "default": "hello@example.com"
+      }, {
+        "type": "text",
+        "id": "phone",
+        "label": "Phone number",
+        "default": "+1 234 567 890"
+      }, {
+        "type": "textarea",
+        "id": "address",
+        "label": "Business address",
+        "default": "123 Main Street\nYour City"
+      }
+    ],
+    "presets": [
+      {
+        "name": "Main Contact"
+      }
+    ]
+  }
 {% endschema %}
